@@ -1,0 +1,253 @@
+POWSZECHNA LICENCJA PUBLICZNA GNU
+
+Wersja 3, 29 czerwca 2007 r.
+
+Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+
+Zezwala siÍ kopiowaÊ i rozpowszechniaÊ wierne kopie niniejszego dokumentu licencyjnego, bez prawa wprowadzania do niego zmian.
+
+Preambu≥a
+
+Powszechna Licencja Publiczna GNU jest wolnπ, opartπ na zasadzie Ñcopyleftî, licencjπ na oprogramowanie i na innego rodzaju utwory.
+
+Licencje na wiÍkszoúÊ programÛw komputerowych i na inne utwory zosta≥y stworzone po to, aby ograniczyÊ swobodÍ dzielenia siÍ nimi i dokonywania w nich zmian. Natomiast celem Powszechnej Licencji Publicznej GNU jest zagwarantowanie swobody udostÍpniania i zmieniania wszystkich wersji programu ñ sprawienie, by oprogramowanie pozosta≥o wolnym dla wszystkich uøytkownikÛw. Jako Fundacja Wolnego Oprogramowania stosujemy Powszechnπ LicencjÍ Publicznπ GNU do wiÍkszoúci naszego oprogramowania. LicencjÍ tÍ moøna takøe stosowaÊ do wszystkich innych utworÛw udostÍpnionych na tych samych zasadach przez ich twÛrcÛw. Ty takøe moøesz jπ stosowaÊ do swoich programÛw.
+
+Kiedy mÛwimy o wolnym oprogramowaniu, chodzi nam o swobodÍ, nie o cenÍ. Nasze Powszechne Licencje Publiczne zosta≥y zaprojektowane tak, aby zapewniÊ ci swobodÍ rozpowszechniania kopii wolnego oprogramowania (a jeøeli chcesz ñ swobodÍ pobierania wynagrodzenia z tego tytu≥u), zagwarantowaÊ, øe otrzymasz kod ürÛd≥owy lub uzyskasz do niego dostÍp, øe bÍdziesz mÛg≥ zmieniaÊ oprogramowanie lub uøyÊ jego fragmentÛw w nowych wolnych programach, a takøe øe bÍdziesz mia≥ úwiadomoúÊ, øe masz do tego wszystkiego prawo.
+
+Aby chroniÊ twoje prawa, musimy zagwarantowaÊ, øe nikt inny nie bÍdzie mÛg≥ zakwestionowaÊ twoich praw ani domagaÊ siÍ, øebyú z nich zrezygnowa≥. W zwiπzku z tym, jeøeli rozpowszechniasz kopie takiego oprogramowania lub modyfikujesz je, spoczywa na tobie odpowiedzialnoúÊ za poszanowanie wolnoúci innych.
+
+Na przyk≥ad, jeøeli rozpowszechniasz kopie takich programÛw, czy to odp≥atnie, czy teø nieodp≥atnie, musisz przekazaÊ odbiorcom dok≥adnie te same prawa, jakie sam otrzyma≥eú. Musisz zagwarantowaÊ, øe oni takøe otrzymajπ kod ürÛd≥owy lub uzyskajπ do niego dostÍp. Musisz rÛwnieø pokazaÊ im niniejsze warunki, tak aby mogli poznaÊ swoje prawa.
+
+TwÛrcy oprogramowania korzystajπcy z Powszechnej Licencji Publicznej GNU chroniπ swoje prawa dwuetapowo: (1) zastrzegajπ prawa autorskie do oprogramowania oraz (2) oferujπ ci niniejszπ LicencjÍ, udzielajπc ci prawnego zezwolenia na kopiowanie, rozpowszechnianie i/lub modyfikacjÍ tego oprogramowania.
+
+Powszechna Licencja Publiczna chroni programistÛw i twÛrcÛw, wyraünie stwierdzajπc, øe na wolne oprogramowanie nie jest udzielana øadna gwarancja. Dla dobra zarÛwno uøytkownikÛw, jak i twÛrcÛw, Powszechna Licencja Publiczna wymaga, aby zmodyfikowane wersje zosta≥y oznaczone jako zmienione, aby problemy z nimi nie zosta≥y omy≥kowo przypisane twÛrcom poprzednich wersji.
+
+NiektÛre urzπdzenia zaprojektowane sπ tak, aby uøytkownicy nie mieli moøliwoúci instalacji ani uruchamiania zmodyfikowanych wersji zainstalowanego w nich oprogramowania, mimo øe sam producent ma takπ moøliwoúÊ. Jest to zasadniczo niezgodne z celem ochrony swobody uøytkownikÛw w zakresie zmiany oprogramowania. Naduøycia takie sπ systematycznie notowane w obszarze produktÛw uøywanych przez osoby fizyczne, czyli dok≥adnie w tym obszarze, gdzie jest to ca≥kowicie nie do przyjÍcia. W zwiπzku z tym niniejszπ wersjÍ Powszechnej Licencji Publicznej przygotowaliúmy w taki sposÛb, aby zabrania≥a ona takich praktyk. Jeøeli problemy tego rodzaju zaistniejπ w istotnym wymiarze takøe w innych obszarach, jesteúmy gotowi rozszerzyÊ to postanowienie na takie obszary w przysz≥ych wersjach Powszechnej Licencji Publicznej w sposÛb niezbÍdny do ochrony wolnoúci uøytkownikÛw.
+
+Kaødy program jest stale zagroøony istnieniem patentÛw na oprogramowanie. PaÒstwa nie powinny dopuszczaÊ do tego, aby patenty ogranicza≥y rozwÛj i moøliwoúÊ uøywania oprogramowania na komputerach ogÛlnego przeznaczenia, jednak w krajach, ktÛre na to pozwalajπ, chcielibyúmy w szczegÛlnoúci uniknπÊ zagroøenia, øe zastosowanie patentu do wolnego programu spowoduje, øe stanie siÍ on faktycznie programem prawnie zastrzeøonym. Aby tego uniknπÊ, zgodnie z Powszechnπ Licencjπ Publicznπ nie moøna uøyÊ patentÛw do pozbawienia wolnoúci oprogramowania.
+
+Poniøej przedstawione zosta≥y dok≥adne zasady i warunki dopuszczalnego kopiowania, rozpowszechniania i modyfikacji.
+
+ZASADY I WARUNKI
+
+0. Definicje
+
+ÑNiniejsza Licencjaî odnosi siÍ do wersji 3 Powszechnej Licencji Publicznej GNU.
+
+ÑPrawo autorskieî oznacza takøe inne prawa na dobrach niematerialnych, zbliøone do prawa autorskiego, jak na przyk≥ad ochrona topografii uk≥adÛw scalonych.
+
+ÑProgramî odnosi siÍ do wszelkich utworÛw podlegajπcych prawu autorskiemu, licencjonowanych na podstawie niniejszej Licencji. Do kaødego licencjobiorcy zwracamy siÍ per Ñtyî. ÑLicencjobiorcyî oraz Ñodbiorcyî mogπ byÊ osobami fizycznymi lub organizacjami.
+
+ÑModyfikacjaî utworu oznacza kopiowanie jego czÍúci lub zmianÍ jego ca≥oúci lub czÍúci w sposÛb wymagajπcy zezwolenia autorskiego, niebÍdπcy jednak wykonaniem dok≥adnej kopii. Uzyskany w ten sposÛb utwÛr zwany jest Ñzmodyfikowanπ wersjπî poprzedniego utworu lub utworem Ñopartym naî poprzednim utworze.
+
+ÑUtwÛr objÍty licencjπî oznacza niezmodyfikowany Program lub utwÛr oparty na Programie.
+
+ÑPropagowanieî utworu oznacza robienie z nim wszystkiego, co bez zezwolenia by≥oby podstawπ do bezpoúredniego lub poúredniego pociπgniÍcia ciÍ do odpowiedzialnoúci za naruszenie odpowiednich przepisÛw o prawie autorskim, z wyjπtkiem uruchomienia tego utworu na komputerze lub modyfikacji jego kopii prywatnej. Propagowanie obejmuje kopiowanie, rozpowszechnianie (w wersji zmodyfikowanej lub niezmodyfikowanej), publiczne udostÍpnianie, a w niektÛrych krajach takøe inne czynnoúci.
+
+ÑPrzekazywanieî utworu oznacza wszelkiego rodzaju propagowanie, ktÛre umoøliwia innym stronom sporzπdzenie lub otrzymanie kopii. Zwyk≥a interakcja z uøytkownikiem poprzez sieÊ komputerowπ, bez transferu kopii, nie jest przekazaniem.
+
+Interaktywny interfejs uøytkownika wyúwietla ÑZastrzeøenia Prawneî w zakresie, w jakim zawiera on wygodnπ i dobrze widocznπ funkcjÍ (1) wyúwietlajπcπ odpowiednie zastrzeøenia prawne oraz (2) informujπcπ uøytkownika, øe na utwÛr nie udziela siÍ gwarancji (z wy≥πczeniem zakresu, w jakim gwarancje te sπ udzielane) i øe licencjobiorcy mogπ przekazywaÊ utwÛr zgodnie z niniejszπ Licencjπ, oraz wskazujπcπ, jak moøna wyúwietliÊ kopiÍ tej Licencji. Jeøeli interfejs zawiera listÍ komend lub opcji uøytkownika, np. menu, to niniejsze kryterium spe≥nione byÊ musi przez jednπ z g≥Ûwnych pozycji z tej listy.
+
+1. Kod ürÛd≥owy
+
+ÑKod ürÛd≥owyî utworu oznacza formÍ utworu preferowanπ do wprowadzania do niej modyfikacji. ÑKod wynikowyî oznacza utwÛr w formie niebÍdπcej formπ ürÛd≥owπ.
+
+ÑStandardowy Interfejsî oznacza interfejs, ktÛry albo jest zgodny z oficjalnym standardem stworzonym przez uznane cia≥o normatywne, albo ñ w przypadku interfejsÛw okreúlonych dla danego jÍzyka programowania ñ jest interfejsem powszechnie stosowanym przez programistÛw pracujπcych w tym jÍzyku.
+
+ÑBiblioteki Systemoweî wykonywalnego utworu obejmujπ wszystko, poza utworem jako ca≥oúciπ, (a) co jest w≥πczone do zwyk≥ej formy pakietu G≥Ûwnego Sk≥adnika, lecz co nie jest czÍúciπ tego G≥Ûwnego Sk≥adnika, oraz (b) czego wy≥πcznym celem jest umoøliwienie, aby utwÛr mÛg≥ byÊ uøywany wraz z tym G≥Ûwnym Sk≥adnikiem, lub wdroøenie Standardowego Interfejsu, dla ktÛrego powszechnie dostÍpna jest implementacja w formie kodu ürÛd≥owego. ÑG≥Ûwny Sk≥adnikî w tym kontekúcie oznacza g≥Ûwny, podstawowy sk≥adnik (jπdro, system okienkowy itp.) danego systemu operacyjnego (jeøeli wystÍpuje), na ktÛrym uruchomiony jest wykonywalny utwÛr, lub kompilator uøyty do produkcji utworu albo interpreter kodu wynikowego uøyty do jego uruchomienia.
+
+ÑOdpowiednie èrÛd≥oî utworu w formie kodu wynikowego oznacza ca≥y kod ürÛd≥owy potrzebny do wygenerowania, instalacji oraz (w przypadku dzie≥a wykonywalnego) uruchomienia kodu wynikowego oraz do modyfikacji utworu, w≥πczajπc w to skrypty do sterowania powyøszymi czynnoúciami. Odpowiednie èrÛd≥o nie obejmuje Bibliotek Systemowych utworu, narzÍdzi ogÛlnego przeznaczenia, ani ogÛlnie dostÍpnych wolnych programÛw, ktÛre uøywane sπ w niezmodyfikowanej formie do realizacji tych czynnoúci, lecz ktÛre nie sπ czÍúciπ utworu. Przyk≥adowo, Odpowiednie èrÛd≥o obejmuje pliki definicji interfejsu powiπzane z plikami ürÛd≥owymi utworu oraz kod ürÛd≥owy dla wspÛ≥dzielonych bibliotek i dynamicznie powiπzanych podprogramÛw, ktÛre zgodnie z projektem utworu sπ niezbÍdne do jego funkcjonowania, na przyk≥ad dziÍki prywatnemu transferowi danych lub przep≥ywowi kontrolnemu pomiÍdzy tymi podprogramami a innymi elementami utworu.
+
+Odpowiednie èrÛd≥o nie musi obejmowaÊ niczego, co uøytkownicy mogπ odtworzyÊ automatycznie z innych czÍúci Odpowiedniego èrÛd≥a.
+
+Odpowiednim èrÛd≥em utworu w formie kodu ürÛd≥owego jest sam utwÛr.
+
+2. Podstawowe zezwolenia
+
+Wszelkie prawa przyznane niniejszπ Licencjπ udzielone sπ na okres obowiπzywania majπtkowych praw autorskich do Programu i sπ nieodwo≥alne, z zastrzeøeniem spe≥nienia okreúlonych poniøej warunkÛw. Niniejsza Licencja wyraünie potwierdza twoje nieograniczone prawo do uruchamiania niezmodyfikowanego Programu. Dane wyjúciowe uzyskane w wyniku uruchomienia utworu objÍtego licencjπ sπ takøe objÍte niniejszπ Licencjπ, tylko jeøeli dane wyjúciowe, biorπc pod uwagÍ ich treúÊ, rÛwnieø stanowiπ utwÛr objÍty licencjπ. Niniejsza licencja potwierdza twoje prawa wynikajπce z dozwolonego uøytku lub podobnych uprawnieÒ wynikajπcych z odpowiednich przepisÛw prawa autorskiego.
+
+Moøesz bezwarunkowo wykonywaÊ, uruchamiaÊ i propagowaÊ utwory objÍte licencjπ, ktÛrych nie przekazujesz, tak d≥ugo, jak twoja licencja zachowuje waønoúÊ. Moøesz przekazywaÊ utwory objÍte licencjπ innym osobom, wy≥πcznie aby wprowadzi≥y one modyfikacje przeznaczone tylko dla ciebie lub aby umoøliwi≥y ci uruchamianie tych utworÛw, pod warunkiem øe spe≥nisz warunki niniejszej Licencji dotyczπce przekazywania wszelkich materia≥Ûw, do ktÛrych nie posiadasz prawa autorskiego. Osoby, ktÛre w opisany powyøej sposÛb wykonujπ lub uruchamiajπ dla ciebie utwory objÍte licencjπ, muszπ robiÊ to wy≥πcznie w twoim imieniu, pod twoim kierownictwem i kontrolπ, na warunkach zakazujπcych im sporzπdzania kopii twoich materia≥Ûw z zastrzeøonym prawem autorskim poza zakresem waszych relacji.
+
+Przekazywanie w innych okolicznoúciach dozwolone jest wy≥πcznie na warunkach wskazanych poniøej. Nie jest dozwolone udzielanie dalszych sublicencji, gdyø w zwiπzku z punktem 10 nie jest to konieczne.
+
+3. Ochrona praw uøytkownikÛw przed zabezpieczeniami technicznymi utworÛw 
+
+Øaden utwÛr objÍty licencjπ nie zostanie uznany za Ñskuteczny úrodek technicznyî na podstawie jakiegokolwiek w≥aúciwego przepisu prawa spe≥niajπcego zobowiπzania wynikajπce z art. 11 traktatu w sprawie praw autorskich (WIPO) z dnia 20 grudnia 1996 r. ani podobnych przepisÛw prawa zabraniajπcych lub ograniczajπcych obchodzenie takich úrodkÛw.
+
+Przekazujπc utwÛr objÍty licencjπ, zrzekasz siÍ wszelkich praw do tego, by zakazaÊ obchodzenia úrodkÛw technologicznych w zakresie, w jakim takie obchodzenie realizowane jest poprzez korzystanie z wynikajπcych z niniejszej Licencji praw do utworu objÍtego licencjπ, oraz zrzekasz siÍ wszelkich zamiarÛw ograniczania funkcjonowania lub modyfikacji utworu, jako sposobu wyegzekwowania, na szkodÍ uøytkownikÛw utworu, praw twoich lub innych osÛb do na≥oøenia zakazu obchodzenia úrodkÛw technologicznych.
+
+4. Przekazywanie wiernych kopii
+
+Moøesz przekazywaÊ wierne kopie kodu ürÛd≥owego Programu w otrzymanej formie i na dowolnym noúniku pod warunkiem, øe w widoczny i odpowiedni sposÛb na kaødej kopii zamieúcisz odpowiedniπ informacjÍ o prawie autorskim. Musisz teø pozostawiÊ w stanie nienaruszonym wszystkie informacje stwierdzajπce, øe do kodu ma zastosowanie niniejsza Licencja oraz wszystkie postanowienia niebÍdπce zezwoleniami dodane zgodnie z punktem 7. Ponadto musisz pozostawiÊ w stanie nienaruszonym wszystkie informacje o braku jakiejkolwiek gwarancji oraz wydaÊ kaødemu odbiorcy egzemplarz niniejszej Licencji wraz z Programem.
+
+Za kaødπ przekazanπ kopiÍ moøesz, ale nie musisz, pobraÊ cenÍ zakupu. Moøesz takøe oferowaÊ p≥atne us≥ugi wsparcia lub p≥atnπ ochronÍ gwarancyjnπ.
+
+5. Przekazywanie zmodyfikowanych wersji èrÛd≥a
+
+Moøesz przekazaÊ utwÛr oparty na Programie lub modyfikacje niezbÍdne do stworzenia tego utworu z Programu w formie kodu ürÛd≥owego na zasadach okreúlonych w punkcie 4, z zastrzeøeniem, øe spe≥niasz takøe wszystkie poniøsze warunki:
+
+a) UtwÛr musi zawieraÊ dobrze widocznπ informacjÍ o tym, øe zmodyfikowa≥eú go oraz o dacie modyfikacji.
+
+b) UtwÛr musi zawieraÊ dobrze widocznπ informacje o tym, øe zosta≥ rozpowszechniony zgodnie z niniejszπ Licencjπ oraz ewentualnie z warunkami dodatkowymi z punktu 7. Niniejszy warunek stanowi modyfikacjÍ wymogu dotyczπcego Ñpozostawienia w stanie nienaruszonym wszystkich informacjiî z punktu 4.
+
+c) Na mocy niniejszej Licencji musisz udzieliÊ licencji na ca≥y utwÛr kaødej osobie, ktÛra wejdzie w posiadanie jego kopii. W zwiπzku z tym niniejsza Licencja, wraz z ewentualnymi warunkami dodatkowymi z punktu 7, bÍdzie mia≥a zastosowanie do ca≥oúci utworu oraz do wszystkich jego czÍúci, niezaleønie od tego, jak zosta≥y one podzielone na czÍúci wchodzπce w sk≥ad ca≥ego utworu. Niniejsza Licencja nie pozwala na licencjonowanie utworu w øaden inny sposÛb, jednak nie powoduje niewaønoúci takiego zezwolenia, jeøeli uzyska≥eú je odrÍbnie.
+
+d) Jeøeli utwÛr posiada interaktywne interfejsy uøytkownika, to w kaødym z tych interfejsÛw muszπ byÊ wyúwietlane Zastrzeøenia Prawne. Jeøeli jednak Program posiada interaktywne interfejsy uøytkownika, w ktÛrych nie sπ wyúwietlane Zastrzeøenia Prawne, to twÛj utwÛr nie musi zapewniaÊ takiego wyúwietlania.
+
+Po≥πczenie utworu objÍtego licencjπ z innymi oddzielnymi, niezaleønymi utworami, ktÛre ze swojej natury nie sπ rozszerzeniem utworu objÍtego licencjπ i ktÛre nie sπ z nim po≥πczone tak, by tworzy≥y wiÍkszy program, na jednym noúniku, na ktÛrym jest on przechowywany lub rozpowszechniany, zwana jest Ñagregatemî, pod warunkiem øe takie po≥πczenie i wynikajπce z niego prawo autorskie nie sπ uøywane do ograniczania dostÍpu ani praw uøytkownikÛw tego po≥πczenia w zakresie wiÍkszym niø dozwolony przez poszczegÛlne utwory. W≥πczenie utworu objÍtego licencjπ do agregatu nie powoduje objÍcia pozosta≥ych czÍúci agregatu niniejszπ Licencjπ.
+
+6. Przekazywanie form niebÍdπcych ürÛd≥em
+
+Moøesz przekazaÊ utwÛr objÍty licencjπ w formie kodu wynikowego na zasadach okreúlonych w punktach 4 i 5, pod warunkiem øe przekaøesz takøe moøliwe do maszynowego odczytania Odpowiednie èrÛd≥o, zgodnie z rozumieniem niniejszej Licencji, na jeden z nastÍpujπcych sposobÛw:
+
+a) Przekaøesz kod wynikowy w fizycznym produkcie lub w≥πczony do fizycznego produktu (co odnosi siÍ takøe do fizycznego noúnika, na ktÛrym jest on rozpowszechniany) razem z Odpowiednim èrÛd≥em na trwa≥ym noúniku fizycznym stosowanym zwykle do wymiany oprogramowania.
+
+b) Przekaøesz kod wynikowy w fizycznym produkcie lub w≥πczony do fizycznego produktu (co odnosi siÍ takøe do fizycznego noúnika, na ktÛrym jest on rozpowszechniany) razem z pisemnym zobowiπzaniem, waønym przez co najmniej trzy lata i tak d≥ugo, jak oferujesz dla tego modelu produktu czÍúci zamienne lub us≥ugi wsparcia klienta, do: (1) wrÍczenia kaødej osobie posiadajπcej kod wynikowy, kopii Odpowiedniego èrÛd≥a ca≥ego oprogramowania produktu objÍtego niniejszπ Licencjπ na trwa≥ym noúniku fizycznym stosowanym zwykle do wymiany oprogramowania, za cenÍ nie wyøszπ niø twÛj rozsπdny koszt faktycznego przekazania tego ürÛd≥a, lub (2) do darmowego udostÍpnienia takiej osobie kopii Odpowiedniego èrÛd≥a na serwerze sieciowym.
+
+c) Przekaøesz indywidualne kopie kodu wynikowego razem z kopiπ pisemnego zobowiπzania do dostarczenia Odpowiedniego èrÛd≥a. Ta moøliwoúÊ dozwolona jest tylko okazjonalnie, dla dystrybucji niekomercyjnej i jedynie wÛwczas, gdy otrzyma≥eú kod wynikowy wraz z takim zobowiπzaniem, zgodnie z podpunktem 6b.
+
+d) Przekaøesz kod wynikowy poprzez zaoferowanie dostÍpu z okreúlonego miejsca (bezp≥atnie lub za op≥atπ) i zaoferowanie podobnego dostÍpu do Odpowiedniego èrÛd≥a w ten sam sposÛb, z tego samego miejsca i bez dodatkowej op≥aty. Odbiorcy nie muszπ byÊ zobowiπzani do kopiowania Odpowiedniego èrÛd≥a wraz z kodem wynikowym. Jeøeli miejsce, z ktÛrego kopiuje siÍ kod wynikowy, jest serwerem sieciowym, to Odpowiednie èrÛd≥o moøe znajdowaÊ siÍ na innym serwerze (prowadzonym przez ciebie lub przez osobÍ trzeciπ) oferujπcym takie same moøliwoúci kopiowania, pod warunkiem øe zapewnisz, øe przy kodzie wynikowym znajdowaÊ siÍ bÍdπ jasne wskazÛwki dotyczπce lokalizacji Odpowiedniego èrÛd≥a. Niezaleønie od serwera, na ktÛrym umieszczone jest Odpowiednie èrÛd≥o, to na tobie spoczywa obowiπzek zapewnienia, øeby by≥o ono dostÍpne przez tak d≥ugi okres, jaki bÍdzie potrzebny do spe≥nienia niniejszych wymagaÒ.
+
+e) Przekaøesz kod wynikowy przy wykorzystaniu transmisji peer-to-peer, pod warunkiem øe poinformujesz odbiorcÛw o tym, gdzie publicznie i za darmo dostÍpne sπ: kod wynikowy utworu oraz jego Odpowiednie èrÛd≥o, zgodnie z podpunktem 6d.
+
+Od≥πczalna czÍúÊ kodu wynikowego, ktÛrego kod ürÛd≥owy jako Biblioteka Systemowa wy≥πczony jest z Odpowiedniego èrÛd≥a, nie musi byÊ za≥πczona przy przekazywaniu utworu w kodzie wynikowym.
+
+ÑProdukt Uøytkownikaî to albo (1) Ñprodukt konsumenckiî, co oznacza kaødy materialny przedmiot w≥asnoúci osobistej uøywany zwykle do celÛw osobistych, rodzinnych lub domowych, albo (2) kaødy produkt, ktÛry zosta≥ zaprojektowany lub sprzedany w celu w≥πczenia go do miejsca zamieszkania. Przy okreúlaniu, czy produkt jest produktem konsumenckim, czy nie, wszelkie wπtpliwoúci bÍdπ rozstrzygane na korzyúÊ objÍcia licencjπ. Dla okreúlonego produktu otrzymanego przez okreúlonego uøytkownika Ñnormalne uøycieî oznacza typowy lub powszechny sposÛb uøywania produktu tej klasy, niezaleønie od statusu danego uøytkownika lub sposobu, w jaki dany uøytkownik faktycznie uøywa, spodziewa siÍ uøywaÊ lub ma uøywaÊ ten produkt. Dany produkt jest produktem konsumenckim niezaleønie od tego, czy posiada istotne zastosowanie komercyjne, przemys≥owe lub niekonsumenckie, chyba øe zastosowania te stanowiπ jedyny istotny sposÛb uøywania tego produktu.
+
+ÑInformacja Instalacyjnaî dla Produktu Uøytkownika oznacza jakiekolwiek metody, procedury, klucze autoryzacyjne lub inne informacje wymagane do zainstalowania i uruchomienia zmodyfikowanych wersji utworu objÍtego licencjπ w tym Produkcie Uøytkownika ze zmodyfikowanej wersji jego Odpowiedniego èrÛd≥a. Informacje te muszπ byÊ wystarczajπce do zapewnienia, øe funkcjonowanie w sposÛb ciπg≥y zmodyfikowanego kodu wynikowego nie zostanie w øadnym przypadku przerwane ani zak≥Ûcone wy≥πcznie z powodu wprowadzenia modyfikacji.
+
+Jeøeli zgodnie z niniejszym punktem przekazujesz utwÛr w formie kodu wynikowego w Produkcie Uøytkownika lub wraz z Produktem Uøytkownika albo wyraünie w celu jego uøycia w Produkcie Uøytkownika, a przekazanie realizowane jest w ramach transakcji, w ktÛrej na odbiorcÍ przenosi siÍ, wieczyúcie (bezterminowo) lub na pewien oznaczony okres (niezaleønie od tego, jak ta transakcja jest opisana), prawo do posiadania i uøywania Produktu Uøytkownika, to Odpowiednie èrÛd≥o przekazywane zgodnie z niniejszym punktem musi zostaÊ przekazane wraz z Informacjπ Instalacyjnπ. WymÛg ten nie ma jednak zastosowania, jeøeli ani ty, ani osoba trzecia nie macie moøliwoúci instalacji zmodyfikowanego kodu obiektowego w Produkcie Uøytkownika (na przyk≥ad jeøeli utwÛr zosta≥ zainstalowany w pamiÍci ROM).
+
+WymÛg dostarczenia Informacji Instalacyjnej nie obejmuje wymogu dalszego úwiadczenia us≥ug wsparcia, dalszego obejmowania gwarancjπ ani dostarczania aktualizacji w odniesieniu do utworu, ktÛry zosta≥ zmodyfikowany lub zainstalowany przez odbiorcÍ, ani w odniesieniu do Produktu Uøytkownika, w ktÛrym utwÛr ten zosta≥ zmodyfikowany lub zainstalowany. DostÍp do sieci moøe zostaÊ zablokowany, w przypadku gdy sama modyfikacja w istotny i niekorzystny sposÛb wp≥ywa na funkcjonowanie sieci lub narusza zasady i protoko≥y komunikacji w sieci.
+
+Przekazane Odpowiednie èrÛd≥o i dostarczona Informacja Instalacyjna zgodnie z niniejszym punktem muszπ mieÊ postaÊ publicznie udokumentowanego formatu (z publicznie dostÍpnπ implementacjπ w formie kodu ürÛd≥owego), a do ich rozpakowania, odczytania lub skopiowania nie moøe byÊ wymagane øadne specjalne has≥o ani klucz.
+
+7. Warunki dodatkowe
+
+ÑDodatkowe zezwoleniaî to postanowienia, ktÛre uzupe≥niajπ warunki niniejszej Licencji, wprowadzajπc wyjπtki od jednego lub wielu jej postanowieÒ. Dodatkowe zezwolenia dotyczπce ca≥ego Programu bÍdπ traktowane tak, jakby by≥y w≥πczone do niniejszej Licencji w zakresie, w jakim sπ one waøne i skuteczne zgodnie z przepisami w≥aúciwego prawa. Jeøeli dodatkowe zezwolenia dotyczπ tylko czÍúci Programu, to czÍúÊ ta moøe byÊ uøywana oddzielnie na podstawie tych zezwoleÒ, przy czym ca≥oúÊ Programu podlega niniejszej Licencji bez uwzglÍdniania tych dodatkowych zezwoleÒ.
+
+Przekazujπc kopiÍ utworu objÍtego licencjπ, moøesz, wedle w≥asnego uznania, usunπÊ z tej kopii lub z jej czÍúci dowolne dodatkowe zezwolenia. (Dodatkowe zezwolenia mogπ same stanowiÊ, øe ich usuniÍcie jest konieczne w pewnych przypadkach modyfikacji utworu). Moøesz takøe wprowadziÊ dodatkowe zezwolenia dotyczπce materia≥Ûw dodanych przez ciebie do utworu objÍtego licencjπ, do ktÛrych masz lub moøesz udzieliÊ odpowiedniego zezwolenia na mocy prawa autorskiego.
+
+Niezaleønie od innych postanowieÒ niniejszej Licencji, wobec materia≥Ûw dodanych przez ciebie do utworu objÍtego licencjπ moøesz (jeøeli masz do tego prawo przyznane przez podmioty uprawnione z tytu≥u majπtkowych praw autorskich do tych materia≥Ûw) dodaÊ do warunkÛw niniejszej Licencji postanowienia:
+
+a) informujπce o braku gwarancji lub ograniczajπce odpowiedzialnoúÊ w sposÛb inny niø postanowienia w punktach 15 i 16 niniejszej Licencji; lub
+
+b) wymagajπce, w granicach rozsπdku, zachowania w tych materia≥ach lub w Zastrzeøeniach Prawnych wyúwietlanych przez utwÛr zawierajπcy te materia≥y, pewnych informacji prawnych lub informacji o ich autorstwie; lub
+
+c) zakazujπce nieprawid≥owego okreúlania pochodzenia tych materia≥Ûw lub wymagajπce, by zmodyfikowane wersje takich materia≥Ûw by≥y oznaczone, w sposÛb rozsπdny, jako rÛøne od wersji oryginalnej; lub
+
+d) ograniczajπce uøywanie nazw/nazwisk licencjodawcÛw lub twÛrcÛw materia≥Ûw do celÛw reklamowych; lub
+
+e) odmawiajπce udzielenia praw ñ wynikajπcych z przepisÛw dotyczπcych znakÛw towarowych ñ do uøywania pewnych nazw handlowych, znakÛw towarowych dotyczπcych zarÛwno towarÛw, jak i us≥ug; lub
+
+f) wymagajπce ochrony licencjodawcÛw oraz twÛrcÛw tych materia≥Ûw ñ przez kaødπ osobÍ przekazujπcπ materia≥y (lub ich zmodyfikowane wersje) z kontraktowym przyjÍciem odpowiedzialnoúci wobec odbiorcy ñ przed wszelkiego rodzaju odpowiedzialnoúciπ, jakπ to kontraktowe przyjÍcie odpowiedzialnoúci nak≥ada bezpoúrednio na tych licencjodawcÛw i twÛrcÛw.
+
+Wszelkie inne dodatkowe warunki niebÍdπce zezwoleniami sπ uznawane za Ñdodatkowe ograniczeniaî w rozumieniu punktu 10. Jeøeli Program w kszta≥cie, w jakim go otrzyma≥eú, lub jakakolwiek jego czÍúÊ zawiera informacjÍ stwierdzajπcπ, øe podlega niniejszej Licencji, oraz postanowienie, ktÛre jest dodatkowym ograniczeniem, to moøesz to postanowienie usunπÊ. Jeøeli treúÊ licencji zawiera dodatkowe ograniczenie, lecz pozwala na dalsze licencjonowanie lub przekazywanie zgodnie z niniejszπ Licencjπ, to do utworu objÍtego licencjπ moøesz dodaÊ materia≥y podlegajπce warunkom owego dokumentu licencji, pod warunkiem øe przy takim dalszym licencjonowaniu lub przekazaniu dodatkowe ograniczenie zostanie usuniÍte.
+
+Jeøeli zgodnie z niniejszym punktem dodasz postanowienia dotyczπce utworu objÍtego licencjπ, to w odpowiednich plikach ürÛd≥owych musisz umieúciÊ tekst tych dodatkowych postanowieÒ odnoszπcych siÍ do tych plikÛw lub informacjÍ wskazujπcπ, gdzie takie postanowienia moøna znaleüÊ.
+
+Dodatkowe warunki bÍdπce lub niebÍdπce zezwoleniami mogπ zostaÊ ujÍte w formie osobno zapisanej licencji lub mogπ zostaÊ wskazane jako wyjπtki. Powyøsze wymogi obowiπzywaÊ bÍdπ niezaleønie od przyjÍtego rozwiπzania.
+
+8. WygaúniÍcie
+
+Poza przypadkami wyraünie wskazanymi w niniejszej Licencji, nie moøesz propagowaÊ ani modyfikowaÊ utworu objÍtego licencjπ. We wszystkich pozosta≥ych przypadkach, kaøda prÛba propagowania lub modyfikacji jest niewaøna i powoduje automatycznie wygaúniÍcie twoich praw wynikajπcych z niniejszej Licencji (w tym wszelkich licencji patentowych udzielonych zgodnie z trzecim akapitem punktu 11).
+
+Jeøeli jednak zaprzestaniesz naruszania niniejszej Licencji, to twoja licencja od danego posiadacza praw autorskich (podmiotu uprawnionego z autorskich praw majπtkowych) zostanie przywrÛcona: (a) tymczasowo do momentu, gdy posiadacz prawa autorskiego wyraünie i ostatecznie cofnie udzielonπ ci licencjÍ, albo (b) trwale, jeøeli posiadacz prawa autorskiego, przy wykorzystaniu rozsπdnych úrodkÛw, nie zawiadomi ciÍ o naruszeniu w terminie do 60 dni od momentu zaprzestania.
+
+Ponadto twoja licencja od danego posiadacza praw autorskich zostanie trwale przywrÛcona, jeøeli w≥aúciciel praw autorskich zawiadomi ciÍ o naruszeniu przy wykorzystaniu rozsπdnych úrodkÛw, jeøeli jest to pierwszy przypadek otrzymania przez ciebie od tego w≥aúciciela praw autorskich zawiadomienia o naruszeniu niniejszej Licencji (dla dowolnego utworu) i jeøeli zaprzestaniesz naruszania licencji w terminie do 30 dni po otrzymaniu takiego zawiadomienia.
+
+WygaúniÍcie twoich praw na podstawie niniejszego punktu nie powoduje wygaúniÍcia licencji stron, ktÛre otrzyma≥y od ciebie kopie lub prawa na podstawie tej Licencji. Jeøeli twoje prawa wygas≥y i nie zosta≥y trwale przywrÛcone, to nie jesteú rÛwnieø uprawniony do otrzymania nowych licencji na ten sam materia≥ na podstawie punktu 10.
+
+9. Brak wymogu akceptacji przy otrzymaniu kopii
+
+Nie musisz zaakceptowaÊ tej Licencji, aby otrzymaÊ lub uruchomiÊ kopiÍ Programu. Analogicznie, propagowanie pomocnicze utworu objÍtego licencjπ, nastÍpujπce wy≥πcznie w konsekwencji uzyskania kopii drogπ transmisji peer-to-peer, takøe nie wymaga akceptacji. Niemniej jednak tylko niniejsza Licencja zezwala ci na propagowanie lub modyfikowanie utworÛw objÍtych licencjπ. Jeøeli nie przyjmiesz niniejszej Licencji, to dzia≥ania takie bÍdπ stanowi≥y naruszenie prawa autorskiego. W zwiπzku z tym, modyfikujπc lub propagujπc utwÛr objÍty licencjπ, potwierdzasz, øe zaakceptowa≥eú niniejszπ LicencjÍ na wykonywanie tych czynnoúci.
+
+10. Automatyczne udzielenie licencji kolejnym odbiorcom
+
+Za kaødym razem, gdy przekazujesz utwÛr objÍty licencjπ, odbiorca automatycznie uzyskuje od pierwotnych licencjodawcÛw licencjÍ na uruchamianie, modyfikowanie i propagowanie tego utworu na warunkach okreúlonych w niniejszej Licencji. Nie jesteú odpowiedzialny za egzekwowanie przestrzegania tej Licencji przez osoby trzecie.
+
+ÑTransakcja podmiotuî to transakcja przenoszπca kontrolÍ organizacji lub generalnie wszystkich aktywÛw jednej organizacji bπdü transakcja podzia≥u organizacji lub transakcja po≥πczenia organizacji. Jeøeli propagowanie utworu objÍtego licencjπ wynika z transakcji podmiotu, to kaøda strona tej transakcji, ktÛra otrzymuje kopiÍ utworu, otrzymuje takøe wszelkie licencje do utworu, jakimi dysponowa≥ poprzednik tej strony, lub ktÛrych mÛg≥ udzieliÊ na mocy poprzedniego akapitu, a ponadto prawo do posiadania Odpowiedniego èrÛd≥a utworu od poprzednika, jeøeli poprzednik posiada je lub moøe je uzyskaÊ, dok≥adajπc rozsπdnych staraÒ.
+
+Nie moøesz narzucaÊ dodatkowych ograniczeÒ na korzystanie przez odbiorcÍ z praw udzielonych w niniejszej Licencji lub przez niπ potwierdzonych. Przyk≥adowo, nie moøesz nak≥adaÊ op≥aty licencyjnej, honorarium autorskiego ani innej op≥aty za korzystanie z praw przyznanych niniejszπ licencjπ i nie moøesz wszczynaÊ postÍpowaÒ sπdowych (w tym takøe zg≥aszaÊ powÛdztwa wzajemnego ani dokonywaÊ przypozwania w postÍpowaniu sπdowym), zarzucajπc, øe jakiekolwiek zastrzeøenie patentowe zosta≥o naruszone poprzez wykonywanie, uøywanie, sprzedaø, oferowanie na sprzedaø lub importowanie Programu albo dowolnej jego czÍúci.
+
+11. Patenty
+
+ÑKontrybutorî to posiadacz prawa autorskiego udzielajπcy niniejszπ Licencjπ prawa do uøywania Programu lub utworu, na ktÛrym oparty jest Program. UtwÛr, na ktÛry udziela siÍ w taki sposÛb licencji, nazywany jest Ñwersjπ kontrybutoraî.
+
+ÑZasadnicze prawa patentoweî kontrybutora to wszystkie prawa patentowe bÍdπce w≥asnoúciπ lub znajdujπce siÍ pod kontrolπ kontrybutora, uzyskane przed datπ niniejszego dokumentu lub pÛüniej, ktÛre zosta≥yby naruszone przez pewien, dozwolony przez niniejszπ LicencjÍ, sposÛb wykonywania, uøywania lub sprzedaøy wersji kontrybutora, przy czym nie obejmujπ one praw, ktÛre zosta≥yby naruszone tylko w konsekwencji dalszej modyfikacji wersji kontrybutora. Dla celÛw niniejszej definicji Ñkontrolaî obejmuje prawo do udzielania dalszych licencji na patent w sposÛb zgodny z wymogami niniejszej Licencji.
+
+Kaødy kontrybutor udziela ci niewy≥πcznej, waønej na ca≥ym úwiecie i zwolnionej z honorarium autorskiego licencji patentowej, na mocy zasadniczych praw patentowych kontrybutora, do wykonywania, uøywania, sprzedaøy, oferowania na sprzedaø, importowania oraz innego uruchamiania, modyfikacji i propagowania treúci wersji kontrybutora.
+
+W trzech poniøszych akapitach termin Ñlicencja patentowaî oznacza kaødπ otwarcie wyraøonπ zgodÍ lub zobowiπzanie, niezaleønie od jej sformu≥owania, do nieegzekwowania praw patentowych (na przyk≥ad otwarcie wyraøonπ zgodÍ na wykorzystanie patentu lub zobowiπzanie do powstrzymania siÍ od dzia≥aÒ prawnych w przypadku naruszenia praw patentowych). ÑUdzielenieî takiej licencji patentowej pewnej osobie oznacza wyraøenie takiej zgody lub zobowiπzania do nieegzekwowania praw patentowych od tej osoby.
+
+Jeøeli przekazujesz utwÛr objÍty licencjπ, úwiadomie polegajπc na udzielonej licencji patentowej, a Odpowiednie èrÛd≥o utworu nie jest dla nikogo dostÍpne do darmowego kopiowania zgodnie z warunkami niniejszej Licencji na publicznie dostÍpnym serwerze sieciowym lub poprzez inne úrodki dostÍpu, wtedy musisz albo (1) zapewniÊ dostÍpnoúÊ Odpowiedniego èrÛd≥a, albo (2) doprowadziÊ do pozbycia siÍ praw wynikajπcych z licencji patentowej na dany utwÛr, albo (3) zapewniÊ rozszerzenie licencji patentowej na dalszych odbiorcÛw w sposÛb zgodny z wymogami niniejszej Licencji. Ñåwiadome poleganieî oznacza, øe masz faktycznπ wiedzÍ, øe gdyby nie by≥o licencji patentowej, to przekazywanie przez ciebie w danym kraju utworu objÍtego licencjπ lub uøywanie tego utworu przez twojego odbiorcÍ w danym kraju narusza≥oby w tym kraju jeden lub wiÍcej konkretnych patentÛw, co do ktÛrych masz powody uwaøaÊ, øe wciπø obowiπzujπ.
+
+Jeøeli na mocy jednej transakcji lub porozumienia albo w zwiπzku z takπ transakcjπ lub porozumieniem przekazujesz utwÛr objÍty licencjπ bπdü, powodujπc jego przekazanie, propagujesz je i udzielasz licencji patentowej niektÛrym ze stron otrzymujπcym to utwÛr objÍty licencjπ, dajπc im prawo do uøywania, propagowania, modyfikowania lub przekazywania okreúlonej kopii utworu objÍtego licencjπ, to udzielona przez ciebie licencja patentowa zostaje automatycznie rozszerzona na wszystkich odbiorcÛw utworu objÍtego licencjπ oraz wszystkich utworÛw na nim opartych.
+
+Licencja patentowa jest ÑwybiÛrczaî, jeøeli w jej zakresie brakuje jednego lub wiÍcej praw przyznanych niniejszπ Licencjπ lub jeøeli zabrania ona korzystania z takiego prawa lub praw albo jeøeli jej udzielenie uwarunkowane jest niewykorzystaniem takiego prawa lub praw. Nie moøesz przekazaÊ utworu objÍtego licencjπ, jeøeli jesteú stronπ porozumienia z osobπ trzeciπ prowadzπcπ dzia≥alnoúÊ polegajπcπ na rozpowszechnianiu oprogramowania, w ramach ktÛrego dokonujesz p≥atnoúci na rzecz tej osoby w zaleønoúci od zasiÍgu twoich dzia≥aÒ w zakresie przekazywania utworu i w ramach ktÛrego osoba ta udziela wszystkim stronom, ktÛre otrzymajπ od ciebie utwÛr objÍty licencjπ, wybiÛrczej licencji patentowej: (a) powiπzanej z przekazanymi przez ciebie kopiami utworu objÍtego licencjπ (lub kopiami tych kopii) lub (b) g≥Ûwnie na produkty lub kompilacje zawierajπce utwory objÍte licencjπ i w zwiπzku z nimi, chyba øe porozumienie takie zawar≥eú przed dniem 28 marca 2007 r. lub dana licencja patentowa zosta≥a udzielona przed tym dniem.
+
+Øadne z postanowieÒ niniejszej Licencji nie bÍdzie interpretowane jako wy≥πczenie lub ograniczenie jakiejkolwiek domyúlnej licencji lub innych úrodkÛw ochrony przed naruszeniem, jakie mogπ ci przys≥ugiwaÊ na mocy przepisÛw odpowiedniego prawa patentowego.
+
+12. Zakaz ograniczania praw (wolnoúci) osÛb trzecich
+
+Jeøeli narzucone ci zostanπ (czy to przez nakaz sπdu, umowÍ, czy w inny sposÛb) warunki sprzeczne z warunkami niniejszej Licencji, to taka okolicznoúÊ nie zwalnia ciÍ z obowiπzku przestrzegania postanowieÒ niniejszej Licencji. Jeúli nie moøesz przekazywaÊ utworu objÍtego licencjπ w taki sposÛb, aby wype≥niaÊ jednoczeúnie swoje obowiπzki z tytu≥u niniejszej Licencji i inne stosowne obowiπzki, to w efekcie nie moøesz przekazywaÊ tego utworu wcale. Na przyk≥ad, jeøeli zgodzisz siÍ na warunki zobowiπzujπce ciÍ do pobierania honorarium autorskiego za dalsze przekazywanie Programu od osÛb, ktÛrym go przekazujesz, to jedynym sposobem na spe≥nienie tych warunkÛw i jednoczeúnie postanowieÒ Licencji by≥oby ca≥kowite zaprzestanie przekazywania tego Programu.
+
+13. Uøywanie z Powszechnπ Licencjπ Publicznπ GNU Affero
+
+Niezaleønie od innych postanowieÒ niniejszej Licencji, moøesz powiπzaÊ lub po≥πczyÊ kaødy utwÛr objÍty licencjπ z utworem objÍtym wersjπ 3 Powszechnej Licencji Publicznej GNU Affero, w jeden po≥πczony utwÛr, oraz przekazywaÊ utwÛr, ktÛry powsta≥ w ten sposÛb. Warunki niniejszej Licencji bÍdπ dalej obowiπzywa≥y dla czÍúci stanowiπcej utwÛr objÍty licencjπ, natomiast do samego po≥πczonego utworu stosowane bÍdπ specjalne wymagania punktu 13 Powszechnej Licencji Publicznej GNU Affero dotyczπce interakcji w sieci.
+
+14. Poprawione wersje niniejszej Licencji
+
+W miarÍ potrzeb Fundacja Wolnego Oprogramowania moøe publikowaÊ poprawione oraz/lub nowe wersje Powszechnej Licencji Publicznej GNU. Takie nowe wersje bÍdπ napisane w duchu podobnym do obecnej wersji, ale mogπ rÛøniÊ siÍ w szczegÛ≥ach poruszajπcych nowe problemy lub zagadnienia.
+
+Kaødej wersji nadaje siÍ wyrÛøniajπcy jπ numer. Jeøeli Program zawiera informacjÍ, øe objÍty jest pewnπ okreúlonπ wersjπ Powszechnej Licencji Publicznej GNU oraz Ñdowolnπ z pÛüniejszych wersjiî, to masz do wyboru stosowaÊ siÍ do zasad i warunkÛw tej okreúlonej wersji lub do dowolnej pÛüniejszej wersji wydanej przez FundacjÍ Wolnego Oprogramowania. Jeøeli Program nie podaje numeru wersji niniejszej Powszechnej Licencji Publicznej GNU, to moøesz wybraÊ dowolnπ wersjÍ kiedykolwiek opublikowanπ przez FundacjÍ Wolnego Oprogramowania.
+
+Jeøeli Program zawiera informacjÍ, øe przedstawiciel moøe podjπÊ decyzjÍ o tym, ktÛra z przysz≥ych wersji Powszechnej Licencji Publicznej GNU bÍdzie mia≥a zastosowanie, to publiczne oúwiadczenie tego przedstawiciela o akceptacji danej wersji daje ci bezterminowo prawo do stosowania tej w≥aúnie wersji w odniesieniu do Programu.
+
+Na mocy pÛüniejszych wersji licencji moøesz uzyskaÊ dodatkowe lub inne zezwolenia/prawa. Niemniej jednak twoja decyzja o stosowaniu pÛüniejszej wersji nie na≥oøy øadnych dodatkowych obowiπzkÛw ani na twÛrcÍ, ani na posiadacza prawa autorskiego.
+
+15. Zastrzeøenia dotyczπce gwarancji
+
+W ZAKRESIE DOZWOLONYM PRZEZ W£AåCIWE PRZEPISY PRAWA, PROGRAM NIE JEST OBJ TY GWARANCJ•. O ILE NA PIåMIE NIE STANOWI SI  INACZEJ, POSIADACZE PRAW AUTORSKICH ORAZ/LUB INNE STRONY DOSTARCZAJ• PROGRAM W STANIE, W JAKIM JEST (WERSJA ÑAS ISî) BEZ JAKIEJKOLWIEK GWARANCJI, ANI WYRAØONEJ OTWARCIE, ANI DOMYåLNEJ, W TYM MI DZY INNYMI BEZ DOMYåLNYCH GWARANCJI CO DO PRZYDATNOåCI HANDLOWEJ I PRZYDATNOåCI DO OKREåLONYCH ZASTOSOWA—. TY SAM PONOSISZ CA£E RYZYKO DOTYCZ•CE JAKOåCI I DZIA£ANIA PROGRAMU. GDYBY PROGRAM OKAZA£ SI  WADLIWY, TO TY PONOSISZ KOSZT CA£EGO NIEZB DNEGO SERWISU, NAPRAWY LUB KOREKTY.
+
+16. Ograniczenie odpowiedzialnoúci
+
+O ILE OBOWI•ZUJ•CE PRAWO NIE STANOWI INACZEJ ALBO CZEGOå INNEGO NIE UZGODNIONO W FORMIE PISEMNEJ, ØADEN POSIADACZ PRAW AUTORSKICH ANI INNA STRONA MODYFIKUJ•CA ORAZ/LUB PRZEKAZUJ•CA PROGRAM ZGODNIE Z POWYØSZYMI ZEZWOLENIAMI W ØADNYM WYPADKU NIE B DZIE ODPOWIEDZIALNA WOBEC CIEBIE ZA SZKODY ñ W TYM SZKODY OG”LNE, SPECJALNE, UBOCZNE LUB WT”RNE ñ WYNIK£E Z UØYCIA B•Dè NIEMOØNOåCI UØYCIA PROGRAMU (W TYM, MI DZY INNYMI, ZA UTRAT  DANYCH LUB POWSTANIE DANYCH NIEPRAWID£OWYCH ALBO ZA STRATY PONIESIONE PRZEZ CIEBIE LUB OSOBY TRZECIE, JAK TEØ ZA NIEWSP”£DZIA£ANIE PROGRAMU Z INNYMI PROGRAMAMI), NAWET JEåLI DANY POSIADACZ B•Dè INNA OSOBA ZOSTALI POWIADOMIENI O MOØLIWOåCI POWSTANIA TAKICH SZK”D.
+
+17. Interpretacja punktÛw 15 i 16
+
+Jeøeli powyøsze zastrzeøenia dotyczπce gwarancji oraz ograniczenie odpowiedzialnoúci nie mogπ mieÊ mocy prawnej w danym kraju zgodnie z ich treúciπ, to w≥aúciwe sπdy powinny zastosowaÊ przepisy prawa danego kraju, ktÛre moøliwie w najwiÍkszym stopniu wyraøajπ ca≥kowite wy≥πczenie odpowiedzialnoúci cywilnej w zwiπzku z Programem, chyba øe Program zawiera gwarancjÍ lub akceptacjÍ odpowiedzialnoúci w zamian za wynagrodzenie.
+
+KONIEC ZASAD I WARUNK”W
+
+Jak stosowaÊ niniejsze warunki do twoich nowych programÛw
+
+Jeúli opracowujesz nowy program i chcia≥byú, aby sta≥ siÍ on jak najbardziej uøyteczny dla ogÛ≥u, najlepiej osiπgniesz to, nadajπc twojemu programowi charakter wolnego oprogramowania, ktÛre kaødy moøe rozpowszechniaÊ dalej i zmieniaÊ zgodnie z warunkami niniejszej Licencji.
+
+W tym celu do programu do≥πcz poniøsze informacje. Najbezpieczniej bÍdzie zamieúciÊ je na poczπtku kaødego pliku ürÛd≥owego ñ dziÍki temu najskuteczniej moøna wyraziÊ fakt nieudzielania gwarancji. Kaødy plik powinien zawieraÊ przynajmniej liniÍ z informacjπ o przys≥ugiwaniu w stosunku do utworu autorskich praw majπtkowych (Ñnota copyright-íowaî) i odnoúnik, gdzie moøna znaleüÊ pe≥nπ informacjÍ.
+
+<jedna linia z nazwπ programu i krÛtkπ informacjπ, do czego on s≥uøy>
+
+Copyright (C) <rok> <imiÍ i nazwisko twÛrcy>
+
+Niniejszy program jest wolnym oprogramowaniem ñ moøesz go rozpowszechniaÊ dalej i/lub modyfikowaÊ na warunkach Powszechnej Licencji Publicznej GNU wydanej przez FundacjÍ Wolnego Oprogramowania, wed≥ug wersji 3 tej Licencji lub dowolnej z pÛüniejszych wersji.
+
+Niniejszy program rozpowszechniany jest z nadziejπ, iø bÍdzie on uøyteczny ñ jednak BEZ ØADNEJ GWARANCJI, nawet domyúlnej gwarancji PRZYDATNOåCI HANDLOWEJ albo PRZYDATNOåCI DO OKREåLONYCH ZASTOSOWA—. Bliøsze informacje na ten temat moøna uzyskaÊ z Powszechnej Licencji Publicznej GNU.
+
+Kopia Powszechnej Licencji Publicznej GNU powinna zostaÊ ci dostarczona razem z tym programem. Jeøeli nie zosta≥a dostarczona, odwiedü <http://www.gnu.org/licenses/>.
+
+Podaj teø informacje o sposobie kontaktowania siÍ z tobπ pocztπ elektronicznπ lub zwyk≥π.
+
+Jeúli dany program wykorzystuje po≥πczenie terminalowe, spraw, aby w momencie wchodzenia w tryb interaktywny wyúwietla≥ on komunikat, jak w poniøszym przyk≥adzie:
+
+<program> Copyright (C) <rok> <imiÍ i nazwisko twÛrcy>
+
+Na ten program nie udziela siÍ ABSOLUTNIE ØADNEJ GWARANCJI; dalsze informacje uzyskasz, wpisujπc Ñshow wî.
+
+To jest wolne oprogramowanie i moøesz rozpowszechniaÊ je dalej na okreúlonych warunkach; dalsze informacje uzyskasz, wpisujπc Ñshow cî.
+
+Powyøsze hipotetyczne polecenia Ñshow wî i Ñshow cî winny powodowaÊ wyúwietlenie odpowiednich czÍúci Powszechnej Licencji Publicznej. Oczywiúcie polecenia w twoim programie mogπ byÊ inne; w przypadku interfejsu graficznego uøywa siÍ okna ÑO programieî.
+
+Powinieneú teø poprosiÊ swego pracodawcÍ (jeúli pracujesz jako programista) lub swojπ szko≥Í o podpisanie, w razie potrzeby, ÑZrzeczenie siÍ majπtkowych praw autorskichî do programu. WiÍcej informacji na ten temat oraz na temat stosowania i przestrzegania Powszechnej Licencji Publicznej GNU znajdziesz na stronie <http://www.gnu.org/licenses/>.
+
+Powszechna Licencja Publiczna GNU nie zezwala na w≥πczanie twojego programu do programÛw prawnie zastrzeøonych. Jeúli twÛj program jest bibliotekπ podprogramÛw, moøesz rozwaøyÊ, czy nie bÍdzie korzystniej zezwoliÊ, aby prawnie zastrzeøone aplikacje mog≥y korzystaÊ z twojej biblioteki. Jeúli w≥aúnie to jest twojπ intencjπ, zamiast niniejszej Licencji uøyj Powszechnej Licencji Publicznej GNU dla Bibliotek. Najpierw jednak przeczytaj <http://www.gnu.org/philosophy/why-not-lgpl.html>.

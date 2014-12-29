@@ -1,5 +1,5 @@
 =====================================================
-GPS Tracker Plugin - wtyczka do programu Quantum GIS
+GPS Tracker Plugin - wtyczka do programu QGIS 2.x
 =====================================================
 
 ****
@@ -17,7 +17,7 @@ Quick instruction
 Instalacja
 ++++++++++++
 
-Use plugin installer in Quantum GIS or download zipped file from repository https://github.com/p0cisk/
+Download zipped file from repository https://github.com/gis-support/gps-tracker
 and unpack files into your ~/.qgis/python/plugins folder.
 
 Licencja

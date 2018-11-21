@@ -18,14 +18,17 @@
  *                                                                         *
  ***************************************************************************/
 """
+from __future__ import absolute_import
 # Import the PyQt and QGIS libraries
-from PyQt4.QtCore import QSettings, Qt, QObject, SIGNAL, pyqtSlot
-from PyQt4.QtGui import QColor, QAction, QIcon
-from qgis.core import  QGis
-from GPSTrackerDialog import GPSTrackerDialog, startfile
-import resources
+from builtins import object
+from qgis.PyQt.QtCore import QSettings, Qt, QObject, pyqtSlot
+from qgis.PyQt.QtGui import QColor, QIcon
+from qgis.PyQt.QtWidgets import QAction
+from qgis.core import  Qgis
+from .GPSTrackerDialog import GPSTrackerDialog, startfile
+from . import resources
 
-class GPSTracker:
+class GPSTracker(object):
     def __init__(self, iface):
         # Save reference to the QGIS interface
         self.iface = iface
@@ -36,7 +39,7 @@ class GPSTracker:
         self.action.setIcon(QIcon(":/plugins/GPSTrackerPlugin/icon.png"))
         self.action.setText(u"GPS Tracker Plugin")
         self.manual = QAction(QIcon(":/plugins/GPSTrackerPlugin/help.png"), u"Instrukcja obsługi", self.iface.mainWindow())
-        self.manual.triggered.connect(self.showManual)
+        # self.manual.triggered.connect(self.showManual)
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("GPS Tracker Plugin", self.action)
         self.iface.addPluginToMenu("GPS Tracker Plugin", self.manual)
@@ -50,4 +53,4 @@ class GPSTracker:
     
     @pyqtSlot()
     def showManual(self, checked):
-        startfile(self.dock.pluginPath+'/doc/GPS Tracker instrukcja obslugi.pdf')
+        self.startfile(self.dock.pluginPath+'/doc/GPS Tracker instrukcja obslugi.pdf')

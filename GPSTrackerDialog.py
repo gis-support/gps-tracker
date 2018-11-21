@@ -18,19 +18,23 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from __future__ import absolute_import
+from builtins import str
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QDockWidget, QMenu, QAction, QColorDialog, QFileDialog
 from qgis.core import *
 from qgis.gui import *
-from Ui_GPSTracker import Ui_GPSTracker
+from .Ui_GPSTracker import Ui_GPSTracker
 
-from gpsConnection import GPSConnection
+from .gpsConnection import GPSConnection
 
-from gpsWidgets import GPSPointListView, GPSInfoListView
+from .gpsWidgets import GPSPointListView, GPSInfoListView
 
 from math import sqrt
 import json
-from gpsUtils import *
+from .gpsUtils import *
+from future.utils import with_metaclass
 
 try:
     from os import startfile
@@ -41,12 +45,12 @@ except:
         opener ="open" if platform == "darwin" else "xdg-open"
         call([opener, fileName])
 
-class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
-    __metaclass__ = ErrorCatcher
+class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget , Ui_GPSTracker), {})) ):
     infoList = [[0., 0.], '', '', '', '', '', '', '', '', '', '', '']
     #pointList = [{'x':20.9, 'y':52.2, 'lp':10, 'text':'1 pomiar', 'checked':Qt.Checked, 'id':1}, 
     #             {'x':21.1, 'y':52.3, 'lp':30, 'text':'2 pomiar', 'checked':Qt.Checked, 'id':2},
     #             {'x':21.05, 'y':52.2, 'lp':20, 'text':'3 pomiar', 'checked':Qt.Checked, 'id':3}]
+    # wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     
     def __init__(self,iface):
@@ -294,7 +298,7 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
         self.connection.gpsConnectionStart.connect(self.logger.openFile)
         self.connection.gpsConnectionStop.connect(self.logger.closeFile)
         #zmiana układu współrzędnych
-        self.canvas.mapRenderer().destinationSrsChanged.connect(self.setProjectCrs)
+        self.canvas.destinationCrsChanged.connect(self.setProjectCrs)
         #zakładki
         self.btnPosition.clicked.connect(self.changePage)
         self.btnLayers.clicked.connect(self.changePage)
@@ -402,7 +406,10 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
         gpsCoords = self.transform.transform(x, y)
         if not self.lastGpsPoint == gpsCoords:
             if self.doIntervalMeasure:
-                self.checkInterval(x, y)
+                try:
+                    self.checkInterval(x, y)
+                except:
+                    return
             self.lastGpsPoint = gpsCoords
             if self.cmbCenter.currentIndex() == 0:
                 self.moveCanvas(gpsCoords)
@@ -418,7 +425,7 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
         self.canvas.refresh()
     
     def setProjectCrs(self):
-        self.transform = QgsCoordinateTransform(self.wgs84, self.canvas.mapRenderer().destinationCrs())
+        self.transform = QgsCoordinateTransform(self.wgs84, self.canvas.mapSettings().destinationCrs(), QgsProject.instance())
         self.marker.transform = self.transform
         self.path.transform = self.transform
         self.path.dataChanged()
@@ -460,7 +467,8 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
         self.calcMarker.setColor(QColor('black'))
         self.calcMarker.setIconType(QgsVertexMarker.ICON_CROSS)
         points = self.tvPointList.model().getPointList(True)
-        transform = QgsCoordinateTransform(self.wgs84, self.canvas.mapRenderer().destinationCrs())
+        transform = QgsCoordinateTransform(self.wgs84, self.canvas.mapSettings().destinationCrs(), QgsProject.instance())
+        
         for coords in points:
             point = transform.transform(coords['x'], coords['y'])
             action = QAction('Punkt %d (%f,%f)' % (coords['id'], point.x(), point.y()), menu)
@@ -485,12 +493,11 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
     def showCalcPoint(self):
         coords = self.sender().data()
         point = QgsPoint(coords[0], coords[1])
-        self.calcMarker.setCenter(point)
+        self.calcMarker.setCenter(QgsPointXY(point))
     
     def pluginCrsChanged(self, index):
-        transform = QgsCoordinateTransform(self.wgs84, 
-                                           QgsCoordinateReferenceSystem(2176+index,
-                                                                        QgsCoordinateReferenceSystem.EpsgCrsId))
+        crs = QgsCoordinateReferenceSystem(2176+index,)
+        transform = QgsCoordinateTransform(self.wgs84, crs, QgsProject.instance())
         self.tvInfoList.model()._displayTranformation = transform
         self.logger.transform = transform
         self.setWindowTitle(u'GPS Tracker - PUWG %s' % self.cmbCRS.currentText())
@@ -502,7 +509,7 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
     @pyqtSlot()
     def getPorts(self, ports=''):
         """ Sprawdzenie czy są zarejestrowane połączenia """
-        connections = QgsGPSConnectionRegistry.instance().connectionList()
+        connections = QgsApplication.gpsConnectionRegistry().connectionList()
         if len(connections) > 0 and self.connection.getStatus() == self.connection.DISCONNECTED:
             msg = QMessageBox.question(None, 'GPS Tracker Plugin',
                                            u'Wykryto zarejestrowane połączenia! Nie wszystkie dostępne porty mogą być widoczne na liście.\
@@ -511,9 +518,9 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
             if msg == QMessageBox.Yes:
                 for connection in connections:
                     connection.close()
-                    QgsGPSConnectionRegistry.instance().unregisterConnection(connection)
+                    QgsApplication.gpsConnectionRegistry().unregisterConnection(connection)
         if not ports:
-            ports = json.dumps([[str(x[0]), str(x[1])] for x in QgsGPSDetector.availablePorts()[1:]])
+            ports = json.dumps([[str(x[0]), str(x[1])] for x in QgsGpsDetector.availablePorts()[1:]])
             self.saveSettings('comList', ports)
         self.cmbPorts.clear()
         portList = json.loads(ports)
@@ -644,4 +651,4 @@ class GPSTrackerDialog(QDockWidget , Ui_GPSTracker ):
         
         x *= distance
         y *= distance
-        return QgsPoint(p1.x()+x, p1.y()+y)
+        return QgsPointXY(p1.x()+x, p1.y()+y)

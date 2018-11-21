@@ -18,14 +18,18 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from __future__ import absolute_import
+from builtins import str
+from builtins import range
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QMessageBox
 from qgis.core import *
-from gpsUtils import playsound
-from gpsUtils import ErrorCatcher
+from .gpsUtils import playsound
+from .gpsUtils import ErrorCatcher
+from future.utils import with_metaclass
 
-class GPSConnection(QObject):
-    __metaclass__ = ErrorCatcher
+class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     DISCONNECTED = 0
     CONNECTED = 1
     NO_FIX = 2
@@ -79,21 +83,21 @@ class GPSConnection(QObject):
             return None
         self.setStatus(self.CONNECTING)
         self.gpsMessage.emit(u'Łączenie z odbiornikiem GPS...')
-        self.detector = QgsGPSDetector(self._port)
-        self.detector.detected[QgsGPSConnection].connect(self.connectionSucceed)
+        self.detector = QgsGpsDetector(self._port)
+        self.detector.detected[QgsGpsConnection].connect(self.connectionSucceed)
         self.detector.detectionFailed.connect(self.connectionFailed)
         self.detector.advance()
     
     def disconnectGPS(self):
         self.gpsConnectionStop.emit()
-        self.connection.stateChanged[QgsGPSInformation].disconnect()
+        self.connection.stateChanged[QgsGpsInformation].disconnect()
         self.connection.close()
-        QgsGPSConnectionRegistry.instance().unregisterConnection(self.connection)
+        QgsApplication.gpsConnectionRegistry().unregisterConnection(self.connection)
         del self.connection
         self.setStatus(self.DISCONNECTED)
         #rozłączenie sygnałów powoduje wystapienie błędu, więc wykonywane jest twarde usunięcie obiektu z pamięci
-        #self.detector.detected[QgsGPSConnection].disconnect()
-        #self.detector.detectionFailed.disconnect()
+        # self.detector.detected[QgsGPSConnection].disconnect()
+        # self.detector.detectionFailed.disconnect()
         del self.detector
         for i in range(len(self.infoList)-1):
             self.infoList[i+1] = ''
@@ -108,8 +112,8 @@ class GPSConnection(QObject):
         self.gpsMessage.emit(u'Połączono z odbiornikiem GPS')
         playsound(1000, 500)
         self.connection = connection
-        self.connection.stateChanged[QgsGPSInformation].connect(self.informationReceived)
-        QgsGPSConnectionRegistry.instance().registerConnection(self.connection)
+        self.connection.stateChanged[QgsGpsInformation].connect(self.informationReceived)
+        QgsApplication.gpsConnectionRegistry().registerConnection(self.connection)
         self.gpsConnectionStart.emit()
         self.setStatus(self.CONNECTED)
     
@@ -118,7 +122,7 @@ class GPSConnection(QObject):
         self.gpsMessage.emit(u'Błąd połączenia z odbiornikiem GPS')
         playsound(300, 500)
         QMessageBox.critical(None, 'GPS Tracker Plugin', u'Błąd połączenia z odbiornikiem GPS') 
-        connections = QgsGPSConnectionRegistry.instance().connectionList()
+        connections = QgsApplication.gpsConnectionRegistry().connectionList()
         if len(connections) > 0:
             msg = QMessageBox.question(None, 'GPS Tracker Plugin', 
                                        u'Wykryto zarejestrowane połączenia. Czy chcesz je usunąć w celu zwolnienia portu?',
@@ -126,7 +130,7 @@ class GPSConnection(QObject):
             if msg == QMessageBox.Yes:
                 for connection in connections:
                     connection.close()
-                    QgsGPSConnectionRegistry.instance().unregisterConnection(connection)
+                    QgsApplication.gpsConnectionRegistry().unregisterConnection(connection)
     
     def informationReceived(self, gpsData):
         try:
@@ -139,7 +143,7 @@ class GPSConnection(QObject):
                 self.gpsFixTypeChanged.emit(gpsData.fixType)
             self.infoList[8] = self.fixType[gpsData.fixType]
         except KeyError:
-            self.infoList[8] = unicode(gpsData.fixType)
+            self.infoList[8] = str(gpsData.fixType)
         
         try:
             self.infoList[9] = self.quality[gpsData.quality]

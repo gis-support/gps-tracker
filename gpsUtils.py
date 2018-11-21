@@ -18,17 +18,21 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+from __future__ import absolute_import
+from builtins import str
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 from qgis.core import *
 from qgis.gui import *
+from PyQt5.QtWidgets import QPushButton, QMessageBox
 from math import sqrt
 from time import strftime
 from os import remove, stat, path
 from sys import platform
 from subprocess import Popen
 import csv
-import GPSTrackerDialog
+from . import GPSTrackerDialog
+from future.utils import with_metaclass
 try:
     from winsound import Beep
 except ImportError:
@@ -51,19 +55,17 @@ def catch_exception(f):
             GPSTrackerDialog.GPSLogger.writeException('%s' % (''.join([x.replace('\n', '\r\n') for x in traceback.format_exception(exc_type, value, tb)])))
     return func
 
-class ErrorCatcher(pyqtWrapperType):
+class ErrorCatcher(type(QObject)):
     def __new__(cls, name, bases, dct):
         for m in dct:
             if hasattr(dct[m], '__call__'):
                 if type(dct[m]) is pyqtSignal:
                     continue
                 dct[m] = catch_exception(dct[m])
-        return pyqtWrapperType.__new__(cls, name, bases, dct)
+        return type(QObject).__new__(cls, name, bases, dct)
 
 """=============Elementy okna mapy============"""
-class GPSMarkerItem(QgsMapCanvasItem):
-    __metaclass__ = ErrorCatcher
-    
+class GPSMarkerItem(with_metaclass(ErrorCatcher, QgsMapCanvasItem)):
     def __init__(self, canvas, parent=None):
         QgsMapCanvasItem.__init__(self, canvas)
         self.parent = parent
@@ -71,7 +73,7 @@ class GPSMarkerItem(QgsMapCanvasItem):
         self.map_pos = QgsPoint(0.0, 0.0)
 
     def paint(self, painter, xxx, xxx2):
-        self.setPos(self.toCanvasCoordinates(self.map_pos))
+        self.setPos(self.toCanvasCoordinates(QgsPointXY(self.map_pos)))
         halfSize = self.parent.markerSize / 2.0
         self.parent.markerImg.paint(painter, 0 - halfSize, 0 - halfSize, self.parent.markerSize,
                                     self.parent.markerSize, alignment=Qt.AlignCenter)
@@ -86,6 +88,7 @@ class GPSMarkerItem(QgsMapCanvasItem):
         return QRectF(-halfSize, -halfSize, (2.0 * halfSize)+self.labelWidth+1, 2.0 * halfSize)
 
     def setCenter(self, map_pos):
+        self.map_pos = QgsPointXY(self.map_pos)
         self.map_pos = map_pos
         self.setPos(self.toCanvasCoordinates(self.map_pos))
     
@@ -94,11 +97,9 @@ class GPSMarkerItem(QgsMapCanvasItem):
         self.labelWidth = self.parent.markerFontMetric.width(self.label)
 
     def updatePosition(self):
-        self.setCenter(self.map_pos)
+        self.setCenter(QgsPointXY(self.map_pos))
 
-class GPSMarker(QObject):
-    __metaclass__ = ErrorCatcher
-    
+class GPSMarker(with_metaclass(ErrorCatcher, QObject)):
     def __init__(self, canvas, iconPath, parent=None):
         QObject.__init__(self, parent)
         self.marker = None
@@ -148,16 +149,14 @@ class GPSMarker(QObject):
             self.canvas.scene().removeItem(self.marker)
             self.marker = None
 
-class GPSPath(QObject):
-    __metaclass__ = ErrorCatcher
-    
+class GPSPath(with_metaclass(ErrorCatcher, QObject)):
     def __init__(self, canvas, parent):
         QObject.__init__(self, parent)
         self.canvas = canvas
         self.parent = parent
-        self.path = QgsRubberBand(canvas)
+        self.path = QgsRubberBand(canvas, QgsWkbTypes.PointGeometry)
         self.path.setColor(QColor('black'))
-        self.vertexes = QgsRubberBand(canvas, QGis.Point)
+        self.vertexes = QgsRubberBand(canvas, QgsWkbTypes.PointGeometry)
         self.vertexes.setIcon(QgsRubberBand.ICON_CROSS)
         self.vertexes.setColor(QColor('red'))
         self.vertexes.setIconSize(10)
@@ -177,16 +176,17 @@ class GPSPath(QObject):
             self.vertexes.addPoint(point)
     
     def resetPoints(self):
-        self.path.reset()
-        self.vertexes.reset(QGis.Point)
+        try:
+            self.path.reset()
+        except:
+            pass
+        self.vertexes.reset(QgsWkbTypes.PointGeometry)
     
     def setVisible(self, visible):
         self.path.setVisible(visible)
         self.vertexes.setVisible(visible)
 
-class GPSSelectedMarker(QObject):
-    __metaclass__ = ErrorCatcher
-    
+class GPSSelectedMarker(with_metaclass(ErrorCatcher, QObject)):
     def __init__(self, canvas, parent=None):
         QObject.__init__(self, parent)
         self.marker = None
@@ -213,13 +213,12 @@ class GPSSelectedMarker(QObject):
             return
         elif not self.marker:
             self.createMarker()
-        self.marker.setCenter(self.transform.transform(point))
+        self.marker.setCenter(self.transform.transform(QgsPointXY(point)))
 
 """=============Zapisywanie danych============"""
-class GPSDataWriter(QObject):
-    __metaclass__ = ErrorCatcher
+class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
     wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
-    geomIcon = {QGis.Point:'pointLayer.svg', QGis.Line:'lineLayer.svg', QGis.Polygon:'polygonLayer.svg'}
+    geomIcon = {QgsWkbTypes.PointGeometry:'pointLayer.svg', QgsWkbTypes.LineGeometry:'lineLayer.svg', QgsWkbTypes.PolygonGeometry:'polygonLayer.svg'}
     iconsPath = str(QFileInfo(__file__).absolutePath()) + '/icons/'
     nrFieldIndex = -1
     
@@ -228,32 +227,32 @@ class GPSDataWriter(QObject):
         self.parent = parent
         self.cmbLayers = cmbLayers
         self.parent.connection.gpsMeasureStopped[dict, bool].connect(self.pointReceived)
-        QgsMapLayerRegistry.instance().layersAdded.connect(self.addLayers)
-        QgsMapLayerRegistry.instance().layersWillBeRemoved.connect(self.removeLayers)
+        QgsProject.instance().layersAdded.connect(self.addLayers)
+        QgsProject.instance().layersWillBeRemoved.connect(self.removeLayers)
         cmbLayers.currentIndexChanged[int].connect(self.changeLayer)
         #jeszcze zmiana nazwy warstwy
         self.setLayer(None)
         self.getAllLayers()
     
     def clean(self):
-        QgsMapLayerRegistry.instance().layersAdded.disconnect(self.addLayers)
-        QgsMapLayerRegistry.instance().layersWillBeRemoved.disconnect(self.removeLayers)
+        QgsProject.instance().layersAdded.disconnect(self.addLayers)
+        QgsProject.instance().layersWillBeRemoved.disconnect(self.removeLayers)
     
     def getAllLayers(self):
-        self.addLayers(QgsMapLayerRegistry.instance().mapLayers().itervalues())
+        self.addLayers(iter(list(QgsProject.instance().mapLayers().values())))
     
     def setLayer(self, layer):
         self.activeLayer = layer
         if layer:
-            self.transform = QgsCoordinateTransform(self.wgs84, layer.crs())
+            self.transform = QgsCoordinateTransform(self.wgs84, layer.crs(), QgsProject.instance())
     
     def changeLayer(self, index):
         layerId = self.sender().itemData(index)
-        layer = QgsMapLayerRegistry.instance().mapLayer(layerId)
+        layer = QgsProject.instance().mapLayer(layerId)
         if not layer:
             self.setLayer(None)
             return
-        if layer.name().lower() == 'punkty_pomocnicze' and layer.geometryType() == QGis.Point:
+        if layer.name().lower() == 'punkty_pomocnicze' and layer.geometryType() == QgsWkbTypes.PointGeometry:
             self.nrFieldIndex = layer.fieldNameIndex('NR')
         else:
             self.nrFieldIndex = -1
@@ -280,14 +279,14 @@ class GPSDataWriter(QObject):
     def pointReceived(self, coords, updatePoint=False):
         if updatePoint or not self.activeLayer:
             return
-        if self.activeLayer.isEditable() and self.activeLayer.geometryType() == QGis.Point:
-            self.fields = self.activeLayer.pendingFields()
+        if self.activeLayer.isEditable() and self.activeLayer.geometryType() == QgsWkbTypes.PointGeometry:
+            self.fields = self.activeLayer.fields()
             self.savePoint(coords, self.parent.tvPointList.model().rowCount(), self.getShowFeatureForm())
             self.parent.iface.mapCanvas().refresh()
     
     def savePoint(self, coords, index, showFeatureForm):
         point = QgsFeature()
-        point.setGeometry(QgsGeometry.fromPoint(self.transform.transform(coords['x'], coords['y'])))
+        point.setGeometry(QgsGeometry.fromPointXY(self.transform.transform(coords['x'], coords['y'])))
         point.setFields(self.fields, True)
         if self.nrFieldIndex != -1:
             point.setAttribute(self.nrFieldIndex, index+1)
@@ -298,7 +297,7 @@ class GPSDataWriter(QObject):
     
     def savePoints(self, allPoints):
         self.isFirstPoint = True
-        self.fields = self.activeLayer.pendingFields()
+        self.fields = self.activeLayer.fields()
         self.activeLayer.startEditing()
         points = self.parent.tvPointList.model().getPointList(allPoints)
         showFeatureForm = self.getShowFeatureForm()
@@ -323,25 +322,33 @@ class GPSDataWriter(QObject):
         if self.parent.tvPointList.model().rowCount() == 0:
             QMessageBox.critical(None, 'GPS Tracker Plugin', u'Brak zarejestrowanych punktów!')
             return
-        geomType = self.activeLayer.geometryType()
-        if geomType == QGis.Point:
+        try:
+            geomType = self.activeLayer.geometryType()
+        except:
+             self.parent.iface.messageBar().pushMessage('BŁĄD',
+                 self.tr(u'Brak warstwy wektorowej do zapisu obiektów'),
+                 Qgis.Critical,
+                 duration = 3
+             )
+             return
+        if geomType == QgsWkbTypes.PointGeometry:
             self.savePoints(allPoints)
         else:
             self.saveObject(allPoints, geomType)
     
     def saveObject(self, checkedOnly, geomType):
         points = self.parent.tvPointList.model().getPointList(checkedOnly)
-        if (geomType == QGis.Line and len(points) < 2) or (geomType == QGis.Polygon and len(points) < 3):
+        if (geomType == QgsWkbTypes.LineGeometry and len(points) < 2) or (geomType == QgsWkbTypes.PolygonGeometry and len(points) < 3):
             QMessageBox.critical(None, 'GPS Tracker Plugin', u'Liczba zarejestrowanych lub wybranych punktów jest zbyt mała!')
             return
         showFeatureForm = self.getShowFeatureForm()
         self.activeLayer.startEditing()
         feat = QgsFeature()
-        if geomType == QGis.Line:
-            feat.setGeometry(QgsGeometry.fromPolyline([self.transform.transform(point['x'], point['y']) for point in points]))
+        if geomType == QgsWkbTypes.LineGeometry:
+            feat.setGeometry(QgsGeometry.fromPolylineXY([self.transform.transform(point['x'], point['y']) for point in points]))
         else:
-            feat.setGeometry(QgsGeometry.fromPolygon([[self.transform.transform(point['x'], point['y']) for point in points]]))
-        feat.setFields(self.activeLayer.pendingFields(), True)
+            feat.setGeometry(QgsGeometry.fromPolygonXY([[self.transform.transform(point['x'], point['y']) for point in points]]))
+        feat.setFields(self.activeLayer.fields(), True)
         self.activeLayer.addFeature(feat)
         if showFeatureForm:
             self.parent.iface.openFeatureForm(self.activeLayer, feat)
@@ -352,9 +359,8 @@ class GPSDataWriter(QObject):
     def getShowFeatureForm():
         return not QSettings().value('Qgis/digitizing/disable_enter_attribute_values_dialog', False, type=bool)
 
-class GPSLogFile(QObject):
+class GPSLogFile(with_metaclass(ErrorCatcher, QObject)):
     ''' Pojedynczy plik logowania '''
-    __metaclass__ = ErrorCatcher
     
     def __init__(self, filePath, parent=None):
         QObject.__init__(self, parent)
@@ -374,8 +380,7 @@ class GPSLogFile(QObject):
     def closeFile(self):
         self.logFile.close()
 
-class GPSLogger(QObject):
-    __metaclass__ = ErrorCatcher
+class GPSLogger(with_metaclass(ErrorCatcher, QObject)):
     logDirectory = ''
     ''' Klasa zbiorcza do logowania '''
     def __init__(self, parent=None):
@@ -416,7 +421,7 @@ class GPSLogger(QObject):
             self.nmeaLog.writeData(nmea)
     
     def writeMeasuredPoint(self, calcPoint, updatePoint):
-        #zapidywanie danych z pomiarów
+        #zapisywanie danych z pomiarów
         measureLog = GPSLogFile(path.join(self.getLogDirectory(), 'pomiar_%s.log' % self.sessionDateTime))
         try:
             measureLog.writeData('Pomiar z %s:' % (strftime('%H:%M:%S %d.%m.%Y')))
@@ -431,11 +436,11 @@ class GPSLogger(QObject):
     
     def writePointList(self):
         pointList = self.parent.tvPointList.model().getPointList(True)
-        with open(path.join(self.getLogDirectory(), 'pointList.csv'), 'wb') as csvfile:
+        with open(path.join(self.getLogDirectory(), 'pointList.csv'), 'w') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             for row in pointList:
                 writer.writerow([row['id'], row['x'], row['y'], row['text'], row['lp'], row['checked']])
-    
+                
     @classmethod
     def changeDirectory(cls, directory):
         cls.logDirectory = str(directory)
@@ -461,7 +466,7 @@ Dane zostały zapisane w pliku '%s' w katalogu logowania." % cls.filePath)
             button.setText(u"Otwórz folder")
             button.clicked.connect(cls.openErrorFile)
             widget.layout().addWidget(button)
-            cls.iface.messageBar().pushWidget(widget, QgsMessageBar.CRITICAL, duration=5)
+            cls.iface.messageBar().pushWidget(widget, Qgis.Critical, duration=5)
     
     @classmethod
     def openErrorFile(cls):
@@ -481,9 +486,8 @@ Dane zostały zapisane w pliku '%s' w katalogu logowania." % cls.filePath)
             dir = '%s/log' % QFileInfo(__file__).absolutePath()
         return dir
 
-class GPSMeasureSave(QObject):
+class GPSMeasureSave(with_metaclass(ErrorCatcher, QObject)):
     """Autmatyczne zapisywanie danych pomiarowych"""
-    __metaclass__ = ErrorCatcher
     
     def __init__(self, logger, interval=1, startTimer=False, parent=None):
         QObject.__init__(self, parent)
@@ -527,8 +531,7 @@ class GPSMeasureSave(QObject):
         return data
 
 """=============Wcięcie liniowe============"""
-class GPSResection(QObject):
-    __metaclass__ = ErrorCatcher
+class GPSResection(with_metaclass(ErrorCatcher, QObject)):
     wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     gpsDataChanged = pyqtSignal(QgsPoint)
     
@@ -566,20 +569,21 @@ class GPSResection(QObject):
     def addCalcPoint(self):
         calcPoint = self.calcResection()
         if calcPoint:
-            transform = QgsCoordinateTransform(self.canvas.mapRenderer().destinationCrs(), self.wgs84)
+            calcPoint = QgsPointXY(calcPoint)
+            transform = QgsCoordinateTransform(self.canvas.mapSettings().destinationCrs(), self.wgs84, QgsProject.instance())
             calcPoint84 = transform.transform(calcPoint)
             pointData = {'x':calcPoint84.x(), 'y':calcPoint84.y(), 'lp':0}
             self.parent.tvPointList.model().insertRow(pointData, False)
     
     def setLeftPoint(self, point):
-        self.leftPoint = point
+        self.leftPoint = QgsPointXY(point)
         self.leftMarker = self.showMarker(self.leftMarker, True, QColor('red'), self.leftPoint)
         self.parent.lblAX.setText(str(self.leftPoint.x()))
         self.parent.lblAY.setText(str(self.leftPoint.y()))
         self.calcResection()
     
     def setRightPoint(self, point):
-        self.rightPoint = point
+        self.rightPoint = QgsPointXY(point)
         self.rightMarker = self.showMarker(self.rightMarker, True, QColor('blue'), self.rightPoint)
         self.parent.lblBX.setText(str(self.rightPoint.x()))
         self.parent.lblBY.setText(str(self.rightPoint.y()))
@@ -600,9 +604,15 @@ class GPSResection(QObject):
     def setRightDistance(self, distance):
         self.rightDistance = distance
         self.calcResection()
-    
+        
+    def noCalcResection(self):
+        self.parent.lblXP.setText('N/A')
+        self.parent.lblYP.setText('N/A')
+        self.calcMarker = self.showMarker(self.calcMarker, False)
+        return None
+        
     def calcResection(self):
-        try:
+        if self.leftPoint is not None and self.rightPoint is not None:
             c = sqrt(self.leftPoint.sqrDist(self.rightPoint))
             p = self.rightDistance
             l = self.leftDistance
@@ -613,20 +623,22 @@ class GPSResection(QObject):
             Ca = -p**2+l**2+c**2
             Cb = p**2-l**2+c**2
             Cc = p**2+l**2-c**2
-            P4 = sqrt(Ca*Cb+Ca*Cc+Cb*Cc)
-            Xw = (Xl*Cb+Yl*P4+Xp*Ca-Yp*P4)/(Ca+Cb)
-            Yw = (-P4*Xl+Yl*Cb+P4*Xp+Yp*Ca)/(Ca+Cb)
-        except:
-            self.parent.lblXP.setText('N/A')
-            self.parent.lblYP.setText('N/A')
-            self.calcMarker = self.showMarker(self.calcMarker, False)
-            return None
+            if Ca is not None and Cb is not None and Cc is not None:
+                try:
+                    P4 = sqrt(Ca*Cb+Ca*Cc+Cb*Cc)
+                    Xw = (Xl*Cb+Yl*P4+Xp*Ca-Yp*P4)/(Ca+Cb)
+                    Yw = (-P4*Xl+Yl*Cb+P4*Xp+Yp*Ca)/(Ca+Cb)
+                    self.parent.lblXP.setText(str(Xw))
+                    self.parent.lblYP.setText(str(Yw))
+                    calcPoint = QgsPoint(Xw, Yw)
+                    self.calcMarker = self.showMarker(self.calcMarker, True, QColor('green'),  calcPoint)
+                    return calcPoint
+                except:
+                    self.noCalcResection()
+            else:
+                self.noCalcResection()
         else:
-            self.parent.lblXP.setText(str(Xw))
-            self.parent.lblYP.setText(str(Yw))
-            calcPoint = QgsPoint(Xw, Yw)
-            self.calcMarker = self.showMarker(self.calcMarker, True, QColor('green'),  calcPoint)
-            return calcPoint
+            self.noCalcResection()
     
     def setMarkersVisible(self, index):
         if index != 2:
@@ -644,7 +656,7 @@ class GPSResection(QObject):
         if visible:
             if not marker:
                 marker = self.createMarker(color)
-            marker.setCenter(point)
+            marker.setCenter(QgsPointXY(point))
         elif marker:
             self.canvas.scene().removeItem(marker)
             marker = None
@@ -655,8 +667,7 @@ class GPSResection(QObject):
         marker.setColor(color)
         return marker
 
-class GPSGetCanvasPoint(QgsMapTool):
-    __metaclass__ = ErrorCatcher
+class GPSGetCanvasPoint(with_metaclass(ErrorCatcher, QgsMapTool)):
     emitPoint = pyqtSignal(QgsPoint)
     
     def __init__(self, canvas, btn):
@@ -675,7 +686,7 @@ class GPSGetCanvasPoint(QgsMapTool):
     
     def canvasReleaseEvent(self, e):
         p = self.toMapCoordinates(QPoint(e.x(), e.y()))
-        self.emitPoint.emit(p)
+        self.emitPoint.emit(QgsPoint(p))
     
     def setButton(self, btn):
         self.mButton = btn

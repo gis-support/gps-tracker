@@ -10,7 +10,7 @@
 
 [general]
 name=GPS Tracker Plugin
-qgisMinimumVersion=2.0
+qgisMinimumVersion=3.0.2
 description=Rejestrowanie danych z odbiornika GPS
 version=2.0.3
 

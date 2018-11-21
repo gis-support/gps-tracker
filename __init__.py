@@ -19,6 +19,7 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
+from __future__ import absolute_import
 def classFactory(iface):
-    from GPSTracker import GPSTracker
+    from .GPSTracker import GPSTracker
     return GPSTracker(iface)

@@ -17,14 +17,18 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from __future__ import absolute_import
+from builtins import str
+from builtins import range
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QStyledItemDelegate, QTableView, QAbstractItemView, QMessageBox, QLineEdit
 from qgis.core import *
-from gpsUtils import ErrorCatcher
+from .gpsUtils import ErrorCatcher
+from future.utils import with_metaclass
+from . import GPSTrackerDialog as trackerDialog
 
-class GPSEditDelegate(QStyledItemDelegate):
-    __metaclass__ = ErrorCatcher
-    
+class GPSEditDelegate(with_metaclass(ErrorCatcher, QStyledItemDelegate)):
     def createEditor(self, parent, option, index):
         edit = QLineEdit(parent)
         return edit
@@ -37,9 +41,7 @@ class GPSEditDelegate(QStyledItemDelegate):
         model.setData(index, text)
 
 """=============Modele danych============"""
-class GPSModel(QAbstractTableModel):
-    __metaclass__ = ErrorCatcher
-    
+class GPSModel(with_metaclass(ErrorCatcher, QAbstractTableModel)):
     def __init__(self, tableView, parent=None):
         QAbstractTableModel.__init__(self, parent)
         self.tableView = tableView
@@ -236,13 +238,12 @@ class GPSPointListModel(GPSModel):
             return 1
 
 """=============Kontrolki============"""
-class GPSListView(QTableView):
-    __metaclass__ = ErrorCatcher
+class GPSListView(with_metaclass(ErrorCatcher, QTableView)):
     def __init__(self, data=[], parent=None):
         QTableView.__init__(self, parent)
         self.setSelectionMode(QAbstractItemView.SingleSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.verticalHeader().setMovable(True)
+        self.verticalHeader().setSectionsMovable(True)
     
     def mousePressEvent(self, event):
         if self.rowAt(event.y()) == -1:
@@ -324,6 +325,7 @@ class GPSPointListView(GPSListView):
         self.model().removeRow(item.row())
     
     def deleteItems(self, checked):
+        
         sender = self.sender()
         parent = sender.parent()
         parent.saveSettings('deleteItemType', int(sender.all))
@@ -333,7 +335,7 @@ class GPSPointListView(GPSListView):
         msg = QMessageBox.question(None, 'GPS Tracker Plugin', u'Czy usunąć punkty?', QMessageBox.Yes | QMessageBox.No)
         if msg == QMessageBox.No:
             return
-        indexes = range(self.model().rowCount())
+        indexes = list(range(self.model().rowCount()))
         indexes.reverse()
         for i in indexes:
             item = self.model().index(i, 0)

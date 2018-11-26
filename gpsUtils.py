@@ -31,8 +31,8 @@ from os import remove, stat, path
 from sys import platform
 from subprocess import Popen
 import csv
-from . import GPSTrackerDialog
 from future.utils import with_metaclass
+from . import GPSTrackerDialog
 try:
     from winsound import Beep
 except ImportError:
@@ -43,7 +43,6 @@ else:
         Beep(frequency,duration)
 
 import functools, traceback, sys
-
 """=============Obsługa wyjątków============"""
 def catch_exception(f):
     @functools.wraps(f)
@@ -178,9 +177,9 @@ class GPSPath(with_metaclass(ErrorCatcher, QObject)):
     def resetPoints(self):
         try:
             self.path.reset()
+            self.vertexes.reset(QgsWkbTypes.PointGeometry)
         except:
             pass
-        self.vertexes.reset(QgsWkbTypes.PointGeometry)
     
     def setVisible(self, visible):
         self.path.setVisible(visible)
@@ -535,6 +534,7 @@ class GPSResection(with_metaclass(ErrorCatcher, QObject)):
     wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     gpsDataChanged = pyqtSignal(QgsPoint)
     
+    
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
         self.parent = parent
@@ -612,34 +612,53 @@ class GPSResection(with_metaclass(ErrorCatcher, QObject)):
         return None
         
     def calcResection(self):
-        if self.leftPoint is not None and self.rightPoint is not None:
-            c = sqrt(self.leftPoint.sqrDist(self.rightPoint))
-            p = self.rightDistance
-            l = self.leftDistance
-            Xl = self.leftPoint.x()
-            Yl = self.leftPoint.y()
-            Xp = self.rightPoint.x()
-            Yp = self.rightPoint.y()
-            Ca = -p**2+l**2+c**2
-            Cb = p**2-l**2+c**2
-            Cc = p**2+l**2-c**2
-            if Ca is not None and Cb is not None and Cc is not None:
-                try:
-                    P4 = sqrt(Ca*Cb+Ca*Cc+Cb*Cc)
-                    Xw = (Xl*Cb+Yl*P4+Xp*Ca-Yp*P4)/(Ca+Cb)
-                    Yw = (-P4*Xl+Yl*Cb+P4*Xp+Yp*Ca)/(Ca+Cb)
-                    self.parent.lblXP.setText(str(Xw))
-                    self.parent.lblYP.setText(str(Yw))
-                    calcPoint = QgsPoint(Xw, Yw)
-                    self.calcMarker = self.showMarker(self.calcMarker, True, QColor('green'),  calcPoint)
-                    return calcPoint
-                except:
+        if self.parent.getMeasureMethod() == 0:
+            if self.leftPoint is not None and self.rightPoint is not None:
+                c = sqrt(self.leftPoint.sqrDist(self.rightPoint))
+                p = self.rightDistance
+                l = self.leftDistance
+                Xl = self.leftPoint.x()
+                Yl = self.leftPoint.y()
+                Xp = self.rightPoint.x()
+                Yp = self.rightPoint.y()
+                Ca = -p**2+l**2+c**2
+                Cb = p**2-l**2+c**2
+                Cc = p**2+l**2-c**2
+                if Ca is not None and Cb is not None and Cc is not None:
+                    try:
+                        P4 = sqrt(Ca*Cb+Ca*Cc+Cb*Cc)
+                        Xw = (Xl*Cb+Yl*P4+Xp*Ca-Yp*P4)/(Ca+Cb)
+                        Yw = (-P4*Xl+Yl*Cb+P4*Xp+Yp*Ca)/(Ca+Cb)
+                        self.parent.lblXP.setText(str(Xw))
+                        self.parent.lblYP.setText(str(Yw))
+                        calcPoint = QgsPoint(Xw, Yw)
+                        self.calcMarker = self.showMarker(self.calcMarker, True, QColor('green'),  calcPoint)
+                        return calcPoint
+                    except:
+                        self.noCalcResection()
+                else:
                     self.noCalcResection()
             else:
                 self.noCalcResection()
         else:
-            self.noCalcResection()
-    
+            if self.leftPoint is not None and self.rightPoint is not None:
+                a = self.leftPoint
+                b = self.rightPoint
+                line = QgsGeometry.fromPolylineXY([a,b])
+                dist = self.leftDistance
+                if dist == 0.0:
+                    self.noCalcResection()
+                else:
+                    calcPoint = (line.interpolate(dist).asPoint())
+                    Xcp = calcPoint.x()
+                    Ycp = calcPoint.y()
+                    self.parent.lblXP.setText(str(Xcp))
+                    self.parent.lblYP.setText(str(Ycp))
+                    self.calcMarker = self.showMarker(self.calcMarker, True, QColor('green'), calcPoint)
+                    return calcPoint 
+            else:
+                self.noCalcResection()
+                
     def setMarkersVisible(self, index):
         if index != 2:
             if self.canvas.mapTool() == self.parent.getLeftPoint:
@@ -666,7 +685,7 @@ class GPSResection(with_metaclass(ErrorCatcher, QObject)):
         marker = QgsVertexMarker(self.canvas)
         marker.setColor(color)
         return marker
-
+ 
 class GPSGetCanvasPoint(with_metaclass(ErrorCatcher, QgsMapTool)):
     emitPoint = pyqtSignal(QgsPoint)
     

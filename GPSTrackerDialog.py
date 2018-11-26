@@ -75,6 +75,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.selectedMarker = GPSSelectedMarker(self.canvas)
         self.logger = GPSLogger(self)
         self.lastGpsPoint = None
+        self.measureType = None
         self.doIntervalMeasure = False
         self.setMenus()
         self.setProjectCrs()
@@ -219,7 +220,10 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.btnFontColor.fontColor = QColor()
         self.btnFontColor.fontColor.setNamedColor(s.value('gpsTracker/markerLabelColor', 'black'))
         self.setPointDistanceStyle()
-    
+        #Typ pomiaru
+        self.cmbMeasureMethod.setCurrentIndex(s.value('gpsTracker/measureMethod', 0, type=int))
+        self.measureMethodChanged(self.cmbMeasureMethod.currentIndex())
+        
     def setMenus(self):
         #Przycisk Pomiar
         self.measureMenu = QMenu()
@@ -286,7 +290,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.openLog.triggered.connect(self.openLogDir)
         self.logMenu.addAction(self.openLog)
         self.btnChangeLogDir.setMenu(self.logMenu)
-    
+
     def setupSignals(self):
         self.btnConnect.toggled[bool].connect(self.connectionToggled)
         #połączenie GPS
@@ -327,6 +331,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.calcMenuA.aboutToHide.connect(self.deleteCalcMarker)
         self.calcMenuB.aboutToShow.connect(self.updatePointMenu)
         self.calcMenuB.aboutToHide.connect(self.deleteCalcMarker)
+        self.cmbMeasureMethod.currentIndexChanged[int].connect(self.measureMethodChanged)
         #opcje
         self.cmbCRS.currentIndexChanged[int].connect(self.pluginCrsChanged)
         self.cmbPorts.currentIndexChanged[str].connect(self.portChanged)
@@ -502,7 +507,21 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.logger.transform = transform
         self.setWindowTitle(u'GPS Tracker - PUWG %s' % self.cmbCRS.currentText())
         self.saveSettings('crs', self.cmbCRS.currentIndex())
-
+     
+    def measureMethodChanged(self, index):
+        if index == 0:
+            self.sbBP.setEnabled(True)
+            self.saveSettings('measureMethod', self.cmbMeasureMethod.currentIndex())
+        else:
+            self.sbBP.setEnabled(False)
+            self.saveSettings('measureMethod', self.cmbMeasureMethod.currentIndex())
+       
+    def getMeasureMethod(self):
+        if self.cmbMeasureMethod.currentIndex() == 0:
+            return 0
+        else:
+            return 1
+            
     def portChanged(self, text):
         self.saveSettings('port', text)
     

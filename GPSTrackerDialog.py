@@ -509,6 +509,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.saveSettings('crs', self.cmbCRS.currentIndex())
      
     def measureMethodChanged(self, index):
+        self.resection.calcResection()
         if index == 0:
             self.sbBP.setEnabled(True)
             self.saveSettings('measureMethod', self.cmbMeasureMethod.currentIndex())

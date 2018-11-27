@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'Ui_GPSTracker.ui'
 #
-# Created by: PyQt5 UI code generator 5.10.1
+# Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -801,7 +801,7 @@ class Ui_GPSTracker(object):
         GPSTracker.setWindowTitle(_translate("GPSTracker", "GPS Tracker"))
         self.btnPosition.setToolTip(_translate("GPSTracker", "Położenie"))
         self.btnLayers.setToolTip(_translate("GPSTracker", "Rejestracja punktów"))
-        self.btnCalcPoint.setToolTip(_translate("GPSTracker", "Wcięcie liniowe w przód"))
+        self.btnCalcPoint.setToolTip(_translate("GPSTracker", "Ręczne wyznaczanie punktów"))
         self.btnOptions.setToolTip(_translate("GPSTracker", "Ustawienia"))
         self.btnConnect.setToolTip(_translate("GPSTracker", "Połączenie z odbiornikiem GPS"))
         self.btnConnect.setText(_translate("GPSTracker", "Połącz"))
@@ -832,8 +832,8 @@ class Ui_GPSTracker(object):
         self.lblYP.setText(_translate("GPSTracker", "N/A"))
         self.label_16.setText(_translate("GPSTracker", "Y:"))
         self.lblXP.setText(_translate("GPSTracker", "N/A"))
-        self.cmbMeasureMethod.setItemText(0, _translate("GPSTracker", "Wcięcie liniowe"))
-        self.cmbMeasureMethod.setItemText(1, _translate("GPSTracker", "Pomiar offsetowy"))
+        self.cmbMeasureMethod.setItemText(0, _translate("GPSTracker", "Wcięcie liniowe w przód"))
+        self.cmbMeasureMethod.setItemText(1, _translate("GPSTracker", "Punkt na odcinku"))
         self.bAddCalcPoint.setToolTip(_translate("GPSTracker", "Dodaj punkt P do listy"))
         self.bAddCalcPoint.setText(_translate("GPSTracker", "Dodaj punkt"))
         self.bClear.setToolTip(_translate("GPSTracker", "Zresetuj wprowadzone dane"))

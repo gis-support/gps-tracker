@@ -181,6 +181,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             self.btnDeletePoint.setDefaultAction(self.deleteAll)
         else:
             self.btnDeletePoint.setDefaultAction(self.deleteSelectedItem)
+        self.cmbMeasureMethod.setCurrentIndex(s.value('gpsTracker/measureMethod', 0, type=int))
+        self.measureMethodChanged(self.cmbMeasureMethod.currentIndex())
         #Zakładka Opcje
         self.cmbCRS.setCurrentIndex(s.value('gpsTracker/crs', 4, type=int))
         self.pluginCrsChanged(self.cmbCRS.currentIndex())
@@ -220,9 +222,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.btnFontColor.fontColor = QColor()
         self.btnFontColor.fontColor.setNamedColor(s.value('gpsTracker/markerLabelColor', 'black'))
         self.setPointDistanceStyle()
-        #Typ pomiaru
-        self.cmbMeasureMethod.setCurrentIndex(s.value('gpsTracker/measureMethod', 0, type=int))
-        self.measureMethodChanged(self.cmbMeasureMethod.currentIndex())
+        self.cbOffsetMeasure.setChecked(s.value('gpsTracker/offsetMeasure', False, type=bool))
+        self.sbOffsetDist.setValue(s.value('gpsTracker/offsetDist', 1, type=int))
         
     def setMenus(self):
         #Przycisk Pomiar
@@ -345,6 +346,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.sbExt.valueChanged[int].connect(self.saveValue)
         self.cbLogGPS.toggled[bool].connect(self.setLogging)
         self.cbSaveMeasure.toggled[bool].connect(self.setMeasureSave)
+        self.cbOffsetMeasure.toggled[bool].connect(self.offsetMeasureChanged)
+        self.sbOffsetDist.valueChanged[int].connect(self.setOffsetDistance)
         #self.sbMesaureSaveTime.valueChanged[int].connect(self.setMeasureSaveInterval)
         self.sbMesaureSaveTime.editingFinished.connect(self.setMeasureSaveInterval)
         self.eLogDir.editingFinished.connect(self.setLogDirectory)
@@ -522,6 +525,15 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             return 0
         else:
             return 1
+    
+    def offsetMeasureChanged(self, checked):
+        if self.cbOffsetMeasure.isChecked() and checked:
+            self.saveSettings('offsetMeasure', True)
+        else:
+            self.saveSettings('offsetMeasure', False)
+
+    def setOffsetDistance(self, value):
+        self.saveSettings('offsetDist', value)
             
     def portChanged(self, text):
         self.saveSettings('port', text)

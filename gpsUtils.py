@@ -33,6 +33,7 @@ from subprocess import Popen
 import csv
 from future.utils import with_metaclass
 from . import GPSTrackerDialog
+
 try:
     from winsound import Beep
 except ImportError:
@@ -41,7 +42,6 @@ except ImportError:
 else: 
     def playsound(frequency,duration):
         Beep(frequency,duration)
-
 import functools, traceback, sys
 """=============Obsługa wyjątków============"""
 def catch_exception(f):
@@ -62,7 +62,6 @@ class ErrorCatcher(type(QObject)):
                     continue
                 dct[m] = catch_exception(dct[m])
         return type(QObject).__new__(cls, name, bases, dct)
-
 """=============Elementy okna mapy============"""
 class GPSMarkerItem(with_metaclass(ErrorCatcher, QgsMapCanvasItem)):
     def __init__(self, canvas, parent=None):

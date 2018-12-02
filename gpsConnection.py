@@ -154,6 +154,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
             self.infoList[10] = self.status[str(gpsData.status)]
         except KeyError:
             self.infoList[10] = 'N/A'
+        self.infoList[11] = str(gpsData.direction)
         
         if gpsData.fixType == 1 or gpsData.status == 0 or gpsData.quality == 0:
             if self.getStatus() != self.NO_FIX:

@@ -52,6 +52,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
     #             {'x':21.05, 'y':52.2, 'lp':20, 'text':'3 pomiar', 'checked':Qt.Checked, 'id':3}]
     # wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
     wgs84 = QgsCoordinateReferenceSystem(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+    u1992 = QgsCoordinateReferenceSystem(2180, QgsCoordinateReferenceSystem.EpsgCrsId)
+    
     
     def __init__(self,iface):
         QDockWidget.__init__(self)
@@ -299,7 +301,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.connection.gpsConnectionStatusChanged[int].connect(self.connectionStatusChanged)
         self.connection.gpsFixTypeChanged.connect(self.fixTypeChanged)
         self.connection.gpsMeasureStopped[dict, bool].connect(self.measureStopped)
-        self.connection.gpsPositionChanged[float,float].connect(self.positionChanged)
+        self.connection.gpsPositionChanged[float,float,float].connect(self.positionChanged)
         self.connection.gpsMessage[str].connect(self.setStatus)
         self.connection.gpsConnectionStart.connect(self.logger.openFile)
         self.connection.gpsConnectionStop.connect(self.logger.closeFile)
@@ -348,7 +350,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.cbLogGPS.toggled[bool].connect(self.setLogging)
         self.cbSaveMeasure.toggled[bool].connect(self.setMeasureSave)
         self.cbOffsetMeasure.toggled[bool].connect(self.offsetMeasureChanged)
-        self.sbOffsetDist.valueChanged[int].connect(self.setOffsetDistance)
+        self.sbOffsetDist.valueChanged[float].connect(self.setOffsetDistance)
         #self.sbMesaureSaveTime.valueChanged[int].connect(self.setMeasureSaveInterval)
         self.sbMesaureSaveTime.editingFinished.connect(self.setMeasureSaveInterval)
         self.cmbOffsetDirection.currentIndexChanged[int].connect(self.offsetDirectionChanged)
@@ -411,8 +413,22 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         if updatePoint:
             self.selectedMarker.setMarker(0, QgsPoint(data['x'], data['y']))
     
-    def positionChanged(self, x, y):
+    def positionChanged(self, x, y, direction):
         self.marker.setMarkerPos(x, y)
+        if(self.cbOffsetMeasure.isChecked()):
+            p = QgsCoordinateTransform(self.wgs84, self.u1992, QgsProject.instance()).transform(x, y)
+            distance = self.sbOffsetDist.value()
+            angle = direction - 90
+            if(self.cmbOffsetDirection.currentIndex() == 0):
+                if angle<0:
+                    angle = abs(angle)-360
+            else:
+                if angle>360:
+                    angle = angle - 360
+            calcPoint = p.project(distance, angle)
+            _p = QgsCoordinateTransform(self.u1992, self.wgs84, QgsProject.instance()).transform(calcPoint.x(), calcPoint.y())
+            x = _p.x()
+            y = _p.y()
         gpsCoords = self.transform.transform(x, y)
         if not self.lastGpsPoint == gpsCoords:
             if self.doIntervalMeasure:
@@ -515,9 +531,9 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         
     def offsetDirectionChanged(self, index):
         if index == 0:
-            self.saveSettings('gpsTracker/offsetDirection', self.cmbMeasureMethod.currentIndex())
+            self.saveSettings('gpsTracker/offsetDirection', self.cmbOffsetDirection.currentIndex())
         else:
-            self.saveSettings('gpsTracker/offsetDirection', self.cmbMeasureMethod.currentIndex())
+            self.saveSettings('gpsTracker/offsetDirection', self.cmbOffsetDirection.currentIndex())
      
     def measureMethodChanged(self, index):
         self.resection.calcResection()
@@ -537,8 +553,10 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
     def offsetMeasureChanged(self, checked):
         if self.cbOffsetMeasure.isChecked() and checked:
             self.saveSettings('offsetMeasure', True)
+            return 1
         else:
             self.saveSettings('offsetMeasure', False)
+            return 0
 
     def setOffsetDistance(self, value):
         self.saveSettings('offsetDist', value)
@@ -693,46 +711,6 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         x *= distance
         y *= distance
         return QgsPointXY(p1.x()+x, p1.y()+y)
-        
-        
-        # if(self.cbOffsetMeasure.isChecked == True):
-            # measureOffset = self.sbOffsetDist
-            # if(self.cmbOffsetDirection.currentIndex() == 0):
-                # angle = 270
-                # calcPoint = thisPoint.project(measureOffset, angle)
-            # else:
-                # angle = 90
-                # calcPoint = thisPoint.project(measureOffset, angle)
-                # calcPoint = self.transform.transform(point_offset, QgsCoordinateTransform.ReverseTransform)
-                
-                
-    # def pointReceived(self, coords, updatePoint=False):
-        # if updatePoint or not self.activeLayer:
-            # return
-        # print (coords)
-        # if self.activeLayer.isEditable() and self.activeLayer.geometryType() == QgsWkbTypes.PointGeometry:
-            # if(self.parent.cbOffsetMeasure.isChecked == True):
-                # measureOffset = self.parent.sbOffestDist
-                # p = QgsPoint(coords['x'], coords['y'])
-                # if(self.parent.cmbOffsetDirection.currentIndex() == 0):
-                    # angle = 270
-                    # calcPoint = p.project(measureOffset, angle)
-                    # self.fields = self.activeLayer.fields()
-                    # coords['x'] = calcPoint.x()
-                    # coords['y'] = calcPoind.y()
-                    # self.savePoint(coords, self.parent.tvPointList.model().rowCount(), self.getShowFeatureForm())
-                    # print (coords)
-                # else:
-                    # angle = 90
-                    # calcPoint = p.project(measureOffset, angle)
-                    # self.fields = self.activeLayer.fields()
-                    # coords['x'] = calcPoint.x()
-                    # coords['y'] = calcPoind.y()
-                    # self.savePoint(coords, self.parent.tvPointList.model().rowCount(), self.getShowFeatureForm())
-                    # print (coords)
-            # else:
-                # self.fields = self.activeLayer.fields()
-                # self.savePoint(coords, self.parent.tvPointList.model().rowCount(), self.getShowFeatureForm())
-                # self.parent.iface.mapCanvas().refresh()
-        
+ 
+  
  

@@ -53,7 +53,8 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     gpsConnectionStatusChanged = pyqtSignal(int)
     gpsFixTypeChanged = pyqtSignal(int)
     gpsMeasureStopped = pyqtSignal(dict, bool)
-    gpsPositionChanged = pyqtSignal(float, float)
+    gpsPositionChanged = pyqtSignal(float, float, float)
+    gpsMeasureMethodChanged = pyqtSignal(int)
     
     def __init__(self, infoList, model, displayCrs, port=None, parent=None):
         QObject.__init__(self, parent)
@@ -66,7 +67,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
         if self._status != self.DISCONNECTED:
             return
         self._port = port
-    
+       
     def getPort(self):
         return self._port
     
@@ -173,11 +174,11 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
             playsound(1000,500)
             self.setStatus(self.CONNECTED)
         
-        self.infoList[0] = [gpsData.longitude, gpsData.latitude]
-        self.gpsPositionChanged.emit(gpsData.longitude, gpsData.latitude)
+        self.infoList[0] = [gpsData.longitude, gpsData.latitude, gpsData.direction]
+        self.gpsPositionChanged.emit(gpsData.longitude, gpsData.latitude, gpsData.direction)
         
         if self.measuring:
-            self.measuredPoints.append([gpsData.longitude, gpsData.latitude])
+            self.measuredPoints.append([gpsData.longitude, gpsData.latitude, gpsData.direction])
             self.gpsMessage.emit(u'Numer pomiaru: %d' % len(self.measuredPoints))
             if not self.measureTime and self.measureValue == len(self.measuredPoints):
                 self.stopMeasuring()
@@ -214,6 +215,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     
     def startMeasuring(self, value, updatePoint, measureTime=False):
         self.measuring = True
+        print (self.infoList[0])
         self.measureValue = value
         self.measureTime = measureTime
         self.updatePoint = updatePoint

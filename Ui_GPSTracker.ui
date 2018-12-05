@@ -1088,7 +1088,7 @@ QToolButton::menu-arrow:open {top: 1px; left: 1px;}</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>276</width>
+             <width>297</width>
              <height>651</height>
             </rect>
            </property>
@@ -1221,61 +1221,6 @@ QToolButton::menu-arrow:open {top: 1px; left: 1px;}</string>
                <string>Rejestracja punktów</string>
               </property>
               <layout class="QGridLayout" name="gridLayout">
-               <item row="0" column="1">
-                <widget class="QRadioButton" name="rbShotsAverage">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="toolTip">
-                  <string>Średnia z określonej liczby pomiarów</string>
-                 </property>
-                 <property name="text">
-                  <string>L.pom.</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0" colspan="2">
-                <widget class="QLabel" name="label_2">
-                 <property name="text">
-                  <string>Odległość offsetu LP</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QSpinBox" name="sbOffsetDist">
-                 <property name="suffix">
-                  <string> m</string>
-                 </property>
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>999</number>
-                 </property>
-                 <property name="value">
-                  <number>1</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2" rowspan="2">
-                <widget class="QSpinBox" name="sbMeasureDistance">
-                 <property name="suffix">
-                  <string> m</string>
-                 </property>
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>999</number>
-                 </property>
-                 <property name="value">
-                  <number>25</number>
-                 </property>
-                </widget>
-               </item>
                <item row="0" column="0">
                 <widget class="QRadioButton" name="rbTimeAverage">
                  <property name="sizePolicy">
@@ -1295,18 +1240,20 @@ QToolButton::menu-arrow:open {top: 1px; left: 1px;}</string>
                  </property>
                 </widget>
                </item>
-               <item row="6" column="0" colspan="3">
-                <widget class="QComboBox" name="cmbOffsetDirection">
-                 <item>
-                  <property name="text">
-                   <string>Lewy</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Prawy</string>
-                  </property>
-                 </item>
+               <item row="0" column="1">
+                <widget class="QRadioButton" name="rbShotsAverage">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Średnia z określonej liczby pomiarów</string>
+                 </property>
+                 <property name="text">
+                  <string>L.pom.</string>
+                 </property>
                 </widget>
                </item>
                <item row="0" column="2">
@@ -1322,17 +1269,70 @@ QToolButton::menu-arrow:open {top: 1px; left: 1px;}</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0" colspan="2">
+               <item row="1" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
                   <string>Odległość dla aut.pom.</string>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="0">
+               <item row="2" column="0">
                 <widget class="QCheckBox" name="cbOffsetMeasure">
                  <property name="text">
                   <string>Pom. z offsetem LP</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_2">
+                 <property name="text">
+                  <string>Odległość offsetu LP</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QComboBox" name="cmbOffsetDirection">
+                 <item>
+                  <property name="text">
+                   <string>Lewy</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Prawy</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QDoubleSpinBox" name="sbOffsetDist">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="decimals">
+                  <number>2</number>
+                 </property>
+                 <property name="maximum">
+                  <double>1000000.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QSpinBox" name="sbMeasureDistance">
+                 <property name="suffix">
+                  <string> m</string>
+                 </property>
+                 <property name="minimum">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                 <property name="value">
+                  <number>25</number>
                  </property>
                 </widget>
                </item>

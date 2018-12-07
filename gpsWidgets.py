@@ -171,6 +171,7 @@ class GPSPointListModel(GPSModel):
     
     def setData(self, index, value, role=Qt.EditRole):
         row = index.row()
+        self._data[row].update({"rzedna": row})
         if role == Qt.EditRole:
             self._data[row]['text'] = value
             self.lastDescription = value

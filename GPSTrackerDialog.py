@@ -421,7 +421,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             angle = direction - 90
             if(self.cmbOffsetDirection.currentIndex() == 0):
                 if angle<0:
-                    angle = abs(angle)-360
+                    angle = 360 - abs(angle)
             else:
                 if angle>360:
                     angle = angle - 360

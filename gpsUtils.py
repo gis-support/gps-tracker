@@ -219,6 +219,7 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
     geomIcon = {QgsWkbTypes.PointGeometry:'pointLayer.svg', QgsWkbTypes.LineGeometry:'lineLayer.svg', QgsWkbTypes.PolygonGeometry:'polygonLayer.svg'}
     iconsPath = str(QFileInfo(__file__).absolutePath()) + '/icons/'
     nrFieldIndex = -1
+    rzFieldIndex = -1
     
     def __init__(self, parent, cmbLayers):
         QObject.__init__(self, parent)
@@ -251,7 +252,8 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
             self.setLayer(None)
             return
         if layer.name().lower() == 'punkty_pomocnicze' and layer.geometryType() == QgsWkbTypes.PointGeometry:
-            self.nrFieldIndex = layer.fieldNameIndex('NR')
+            self.nrFieldIndex = layer.fields().indexFromName('NR')
+            self.rzFieldIndex = layer.fields().indexFromName('Rzedna')
         else:
             self.nrFieldIndex = -1
         self.setLayer(layer)
@@ -288,15 +290,22 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         point.setFields(self.fields, True)
         if self.nrFieldIndex != -1:
             point.setAttribute(self.nrFieldIndex, index+1)
+            if self.parent.cbOffsetMeasure.isChecked() or self.parent.cmbMeasureMethod.currentIndex() == 0:
+                point.setAttribute(self.rzFieldIndex, None)
+            else:
+                point.setAttribute(self.rzFieldIndex, index)
             showFeatureForm = False
         self.activeLayer.addFeature(point)
         if showFeatureForm and self.isFirstPoint:
             self.parent.iface.openFeatureForm(self.activeLayer, point)
     
     def savePoints(self, allPoints):
+        self.activeLayer.startEditing()
+        if self.nrFieldIndex != -1:
+            rzedna = QgsField("Rzedna", QVariant.Int)
+            self.activeLayer.addAttribute(rzedna)
         self.isFirstPoint = True
         self.fields = self.activeLayer.fields()
-        self.activeLayer.startEditing()
         points = self.parent.tvPointList.model().getPointList(allPoints)
         showFeatureForm = self.getShowFeatureForm()
         for i, point in enumerate(points):

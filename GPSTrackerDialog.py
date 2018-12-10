@@ -418,11 +418,12 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         if(self.cbOffsetMeasure.isChecked()):
             p = QgsCoordinateTransform(self.wgs84, self.u1992, QgsProject.instance()).transform(x, y)
             distance = self.sbOffsetDist.value()
-            angle = direction - 90
             if(self.cmbOffsetDirection.currentIndex() == 0):
+                angle = direction - 90
                 if angle<0:
-                    angle = 360 - abs(angle)
+                    angle = 360 - abs(angle)   
             else:
+                angle = direction + 90
                 if angle>360:
                     angle = angle - 360
             calcPoint = p.project(distance, angle)

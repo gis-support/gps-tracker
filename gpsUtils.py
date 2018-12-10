@@ -220,6 +220,7 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
     iconsPath = str(QFileInfo(__file__).absolutePath()) + '/icons/'
     nrFieldIndex = -1
     rzFieldIndex = -1
+    calcPointsIndexes = []
     
     def __init__(self, parent, cmbLayers):
         QObject.__init__(self, parent)
@@ -291,7 +292,7 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         point.setFields(self.fields, True)
         if self.nrFieldIndex != -1:
             point.setAttribute(self.nrFieldIndex, index+1)
-            if not self.parent.cbOffsetMeasure.isChecked():
+            if not self.parent.cbOffsetMeasure.isChecked() and index not in self.calcPointsIndexes:
                 point.setAttribute(self.rzFieldIndex, self.parent.lastPointElevation)
             else:
                 point.setAttribute(self.rzFieldIndex, None)
@@ -308,10 +309,13 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         points = self.parent.tvPointList.model().getPointList(allPoints)
         showFeatureForm = self.getShowFeatureForm()
         for i, point in enumerate(points):
+            if point['lp'] == 0:
+                self.calcPointsIndexes.append(i)
             self.savePoint(point, i, showFeatureForm)
             self.isFirstPoint = False
         self.activeLayer.commitChanges()
         self.parent.iface.mapCanvas().refresh()
+        
     
     @pyqtSlot()
     def saveFeature(self):

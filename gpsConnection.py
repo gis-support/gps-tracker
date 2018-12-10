@@ -53,7 +53,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     gpsConnectionStatusChanged = pyqtSignal(int)
     gpsFixTypeChanged = pyqtSignal(int)
     gpsMeasureStopped = pyqtSignal(dict, bool)
-    gpsPositionChanged = pyqtSignal(float, float, float)
+    gpsPositionChanged = pyqtSignal(float, float, float, float)
     gpsMeasureMethodChanged = pyqtSignal(int)
     
     def __init__(self, infoList, model, displayCrs, port=None, parent=None):
@@ -174,11 +174,11 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
             playsound(1000,500)
             self.setStatus(self.CONNECTED)
         
-        self.infoList[0] = [gpsData.longitude, gpsData.latitude, gpsData.direction]
-        self.gpsPositionChanged.emit(gpsData.longitude, gpsData.latitude, gpsData.direction)
+        self.infoList[0] = [gpsData.longitude, gpsData.latitude, gpsData.direction, gpsData.elevation]
+        self.gpsPositionChanged.emit(gpsData.longitude, gpsData.latitude, gpsData.direction, gpsData.elevation)
         
         if self.measuring:
-            self.measuredPoints.append([gpsData.longitude, gpsData.latitude, gpsData.direction])
+            self.measuredPoints.append([gpsData.longitude, gpsData.latitude, gpsData.direction, gpsData.elevation])
             self.gpsMessage.emit(u'Numer pomiaru: %d' % len(self.measuredPoints))
             if not self.measureTime and self.measureValue == len(self.measuredPoints):
                 self.stopMeasuring()
@@ -216,6 +216,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     def startMeasuring(self, value, updatePoint, measureTime=False):
         self.measuring = True
         self.measureValue = value
+
         self.measureTime = measureTime
         self.updatePoint = updatePoint
         if measureTime:
@@ -226,7 +227,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
         if count:
             x = sum([item[0] for item in self.measuredPoints])/count
             y = sum([item[1] for item in self.measuredPoints])/count
-            self.gpsMeasureStopped.emit({'x':x, 'y':y, 'lp':count, 'rzedna':count}, self.updatePoint)
+            self.gpsMeasureStopped.emit({'x':x, 'y':y, 'lp':count}, self.updatePoint)
         self.gpsMessage.emit(u'Zakończono pomiar')
         self.resetMeasuring()
     

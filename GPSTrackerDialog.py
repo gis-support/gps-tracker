@@ -83,6 +83,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.setProjectCrs()
         self.loadSettings()
         self.setupSignals()
+        self.lastPointElevation = None
         self.groupBox_3.setVisible(False)
         self.pointListLogger = GPSMeasureSave(self.logger, QSettings().value('gpsTracker/measureSaveInterval', 1, type=int), QSettings().value('gpsTracker/measureSave', True, type=bool))
         self.tvPointList.model().insertRows(self.pointListLogger.loadMeasure())
@@ -301,7 +302,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.connection.gpsConnectionStatusChanged[int].connect(self.connectionStatusChanged)
         self.connection.gpsFixTypeChanged.connect(self.fixTypeChanged)
         self.connection.gpsMeasureStopped[dict, bool].connect(self.measureStopped)
-        self.connection.gpsPositionChanged[float,float,float].connect(self.positionChanged)
+        self.connection.gpsPositionChanged[float,float,float,float].connect(self.positionChanged)
         self.connection.gpsMessage[str].connect(self.setStatus)
         self.connection.gpsConnectionStart.connect(self.logger.openFile)
         self.connection.gpsConnectionStop.connect(self.logger.closeFile)
@@ -413,7 +414,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         if updatePoint:
             self.selectedMarker.setMarker(0, QgsPoint(data['x'], data['y']))
     
-    def positionChanged(self, x, y, direction):
+    def positionChanged(self, x, y, direction, elevation):
+        self.lastPointElevation = elevation
         self.marker.setMarkerPos(x, y)
         if(self.cbOffsetMeasure.isChecked()):
             p = QgsCoordinateTransform(self.wgs84, self.u1992, QgsProject.instance()).transform(x, y)

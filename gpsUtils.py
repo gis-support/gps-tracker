@@ -253,6 +253,7 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
             return
         if layer.name().lower() == 'punkty_pomocnicze' and layer.geometryType() == QgsWkbTypes.PointGeometry:
             self.nrFieldIndex = layer.fields().indexFromName('NR')
+            self.rzFieldIndex = layer.fields().indexFromName('Rz')
         else:
             self.nrFieldIndex = -1
         self.setLayer(layer)
@@ -290,8 +291,8 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         point.setFields(self.fields, True)
         if self.nrFieldIndex != -1:
             point.setAttribute(self.nrFieldIndex, index+1)
-            if self.parent.cbOffsetMeasure.isChecked() or self.parent.cmbMeasureMethod.currentIndex() == 1:
-                point.setAttribute(self.rzFieldIndex, coords['y'])
+            if not self.parent.cbOffsetMeasure.isChecked():
+                point.setAttribute(self.rzFieldIndex, self.parent.lastPointElevation)
             else:
                 point.setAttribute(self.rzFieldIndex, None)
             showFeatureForm = False
@@ -302,9 +303,6 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
     def savePoints(self, allPoints):
         self.activeLayer.startEditing()
         self.isFirstPoint = True
-        if 'Rzedna' not in self.activeLayer.fields().names():
-            rzedna = QgsField("Rzedna", QVariant.Double, '', 10, 8)
-            self.activeLayer.addAttribute(rzedna)
         self.rzFieldIndex = self.activeLayer.fields().indexFromName('Rzedna')
         self.fields = self.activeLayer.fields()
         points = self.parent.tvPointList.model().getPointList(allPoints)

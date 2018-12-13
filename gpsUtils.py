@@ -254,7 +254,7 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
             return
         if layer.name().lower() == 'punkty_pomocnicze' and layer.geometryType() == QgsWkbTypes.PointGeometry:
             self.nrFieldIndex = layer.fields().indexFromName('NR')
-            self.rzFieldIndex = layer.fields().indexFromName('Rz')
+            self.rzFieldIndex = layer.fields().indexFromName('Rzedna')
         else:
             self.nrFieldIndex = -1
         self.setLayer(layer)

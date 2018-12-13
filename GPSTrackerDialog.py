@@ -323,6 +323,9 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.cbDisplayPoints.stateChanged[int].connect(self.displayPoints)
         self.tvPointList.gpsSelectionChanged[int, QgsPoint].connect(self.selectedMarker.setMarker)
         self.btnIntervalMeasure.clicked[bool].connect(self.setIntervalMeasure)
+        self.btnEnclaveAdd.clicked.connect(self.addEnclave)
+        self.cmbEnclaves.currentIndexChanged[int].connect(self.encIndexChanged)
+        self.btnEnclaveDelete.clicked.connect(self.deleteEnclave)
         #wciecie liniowe
         self.stack.currentChanged[int].connect(self.resection.setMarkersVisible)
         self.getLeftPoint.emitPoint[QgsPoint].connect(self.setPoint)
@@ -505,6 +508,30 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             action.triggered.connect(self.addCalcPoint)
             action.hovered.connect(self.showCalcPoint)
             menu.addAction(action)
+     
+    def addEnclave(self, index):
+       index = self.cmbEnclaves.count()
+       if self.cmbEnclaves.count() == 1:
+           self.cmbEnclaves.addItem('Enklawa 1')
+           self.cmbEnclaves.setCurrentIndex(1)
+       else:
+           self.cmbEnclaves.addItem('Enklawa ' + str(index))
+           self.cmbEnclaves.setCurrentIndex(index)
+           
+    def deleteEnclave(self, index):
+        index = self.cmbEnclaves.currentIndex()
+        if index == 0:
+            return 0
+        else:
+            QMessageBox.question(None, 'GPS Tracker Plugin', 
+                                 u'Usunąć wybraną enklawę?',
+                                 QMessageBox.Yes | QMessageBox.No)
+            if QMessageBox.Yes:
+                self.cmbEnclaves.removeItem(index)
+                self.cmbEnclaves.setCurrentIndex(index - 1)
+                 
+    def encIndexChanged(self, index):
+        pass
     
     def deleteCalcMarker(self):
         self.canvas.scene().removeItem(self.calcMarker)

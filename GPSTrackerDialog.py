@@ -413,6 +413,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             self.btnConnect.setStyleSheet('background-color: rgb(0, 255, 0);')
     
     def measureStopped(self, data, updatePoint):
+        data.update({"group_id": self.cmbEnclaves.currentIndex()})
         self.tvPointList.model().insertRow(data, updatePoint)
         if updatePoint:
             self.selectedMarker.setMarker(0, QgsPoint(data['x'], data['y']))
@@ -528,10 +529,31 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
                                  QMessageBox.Yes | QMessageBox.No)
             if QMessageBox.Yes:
                 self.cmbEnclaves.removeItem(index)
-                self.cmbEnclaves.setCurrentIndex(index - 1)
-                 
+                self.cmbEnclaves.setCurrentIndex(index-1)
+                count = self.cmbEnclaves.count()
+                data = self.tvPointList.model()._data
+                for item in data:
+                    if item['group_id'] == index:
+                        # data.remove(item)
+                        pass
+                    if item['group_id']>index:
+                        item['group_id'] = item['group_id']-1
+                if index < count:
+                    for i in range(count):
+                        if i < index:
+                            pass
+                        else:
+                            encl = self.cmbEnclaves.itemText(i).split(" ")[0]
+                            num = str(int(self.cmbEnclaves.itemText(i).split(" ")[1])-1)
+                            self.cmbEnclaves.setItemText(i, encl+" "+num)                  
+            else:
+                return 0
+                
+                            
     def encIndexChanged(self, index):
-        pass
+        self.tvPointList.model().currentGroup = self.cmbEnclaves.currentIndex()
+        index = self.tvPointList.model().rowCount()-1
+        self.tvPointList.model().dataChanged.emit(self.tvPointList.model().index(0, 0), self.tvPointList.model().index(index, 0))
     
     def deleteCalcMarker(self):
         self.canvas.scene().removeItem(self.calcMarker)

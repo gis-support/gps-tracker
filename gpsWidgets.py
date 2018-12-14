@@ -112,6 +112,7 @@ class GPSInfoListModel(GPSModel):
 class GPSPointListModel(GPSModel):
     _hHeader = ['L.pom.', 'Opis']
     lastDescription = ''
+    currentGroup = None
     
     def __init__(self, data, tableView, parent=None):
         self._data = data
@@ -159,6 +160,9 @@ class GPSPointListModel(GPSModel):
             x = self._data[row]['x']
             y = self._data[row]['y']
             return [x, y]
+        elif role == Qt.BackgroundRole:
+           if self._data[row]['group_id'] == self.currentGroup:
+                return QBrush(QColor("lightgray"))
         
         GPSModel.data(self, index, role)
     
@@ -171,7 +175,6 @@ class GPSPointListModel(GPSModel):
     
     def setData(self, index, value, role=Qt.EditRole):
         row = index.row()
-        # self._data[row].update({"rzedna": h})
         if role == Qt.EditRole:
             self._data[row]['text'] = value
             self.lastDescription = value
@@ -327,7 +330,6 @@ class GPSPointListView(GPSListView):
         self.model().removeRow(item.row())
     
     def deleteItems(self, checked):
-        
         sender = self.sender()
         parent = sender.parent()
         parent.saveSettings('deleteItemType', int(sender.all))

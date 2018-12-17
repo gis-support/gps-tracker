@@ -528,16 +528,21 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
                                  u'Usunąć wybraną enklawę?',
                                  QMessageBox.Yes | QMessageBox.No)
             if QMessageBox.Yes:
+                data = self.tvPointList.model()._data
+                indexes = []
+                for i, item in enumerate(data):
+                    if item['group_id'] == index:
+                        indexes.append(i)
+                    try:
+                        if item['group_id']>index:
+                            item['group_id'] = item['group_id']-1
+                    except:
+                        pass
+                self.tvPointList.model().removeRows(min(indexes),len(indexes))
                 self.cmbEnclaves.removeItem(index)
                 self.cmbEnclaves.setCurrentIndex(index-1)
                 count = self.cmbEnclaves.count()
-                data = self.tvPointList.model()._data
-                for item in data:
-                    if item['group_id'] == index:
-                        # data.remove(item)
-                        pass
-                    if item['group_id']>index:
-                        item['group_id'] = item['group_id']-1
+                
                 if index < count:
                     for i in range(count):
                         if i < index:
@@ -749,7 +754,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         measureDistance = self.sbMeasureDistance.value()
         if distance > measureDistance**2:
             calcPoint = self.transform.transform(self.getPointAtDistance(lastPoint, thisPoint, measureDistance), QgsCoordinateTransform.ReverseTransform)
-            self.tvPointList.model().insertRow({'x':calcPoint.x(), 'y':calcPoint.y(), 'lp':1}, False)
+            self.tvPointList.model().insertRow({'x':calcPoint.x(), 'y':calcPoint.y(), 'lp':1, 'group_id': self.cmbEnclaves.currentIndex()}, False)
     
     @staticmethod
     def getPointAtDistance(p1, p2, distance):

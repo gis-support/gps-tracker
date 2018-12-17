@@ -112,7 +112,7 @@ class GPSInfoListModel(GPSModel):
 class GPSPointListModel(GPSModel):
     _hHeader = ['L.pom.', 'Opis']
     lastDescription = ''
-    currentGroup = None
+    currentGroup = 0
     
     def __init__(self, data, tableView, parent=None):
         self._data = data
@@ -163,6 +163,7 @@ class GPSPointListModel(GPSModel):
         elif role == Qt.BackgroundRole:
            if self._data[row]['group_id'] == self.currentGroup:
                 return QBrush(QColor("lightgray"))
+        self.group = self._data[row]['group_id']
         
         GPSModel.data(self, index, role)
     
@@ -196,19 +197,41 @@ class GPSPointListModel(GPSModel):
         self.endRemoveRows()
         self.dataChanged.emit(QModelIndex(), QModelIndex())
         return True
+        
+    def removeRows(self, row, count, parent=QModelIndex()):
+        self.beginRemoveRows(parent, row, row+count-1)
+        del self._data[row:row+count]
+        self.endRemoveRows()
+        return True
     
     def insertRow(self, data, updatePoint):
         if updatePoint:
             self.setData(self.tableView.selectedIndexes()[0], data, Qt.UserRole)
             return True
-        self.beginInsertRows(QModelIndex(), len(self._data), len(self._data))
+        
         lastIndex = self.getNewIndex()
-        self._data.append(data)
-        self._data[-1].update({'text':self.lastDescription, 'checked':Qt.Checked, 'id':lastIndex})
-        self.endInsertRows()
-        item = self.index(len(self._data), 0)
-        self.dataChanged.emit(item, item)
-        self.tableView.resizeRowToContents(len(self._data)-1)
+        indexes = []
+        for i, item in enumerate(self._data):
+            if item['group_id'] == self.currentGroup:
+                indexes.append(i)
+        if len(indexes)>0:
+            index = max(indexes)
+            self.beginInsertRows(QModelIndex(), index+1, index+1)
+            self._data.insert(index+1, data)
+            self._data[index+1].update({'text':self.lastDescription, 'checked':Qt.Checked, 'id':lastIndex})
+            self.endInsertRows()
+            item = self.index(index+1, 0)
+            self.dataChanged.emit(item, item)
+            self.tableView.resizeRowToContents(index)
+
+        elif len(indexes) == 0:
+            self.beginInsertRows(QModelIndex(), len(self._data), len(self._data))
+            self._data.append(data)
+            self._data[-1].update({'text':self.lastDescription, 'checked':Qt.Checked, 'id':lastIndex})
+            self.endInsertRows()
+            item = self.index(len(self._data), 0)
+            self.dataChanged.emit(item, item)
+            self.tableView.resizeRowToContents(len(self._data)-1)
         return True
     
     def insertRows(self, data):
@@ -216,7 +239,7 @@ class GPSPointListModel(GPSModel):
         self._data = data
         self.endInsertRows()
         return True
-    
+        
     def moveRow(self, logicalIndex, oldVisualIndex, newVisualIndex):
         if self.movingRow:
             self.movingRow = False
@@ -225,6 +248,7 @@ class GPSPointListModel(GPSModel):
         self._data.insert(newVisualIndex, self._data.pop(oldVisualIndex))
         self.tableView.verticalHeader().moveSection(newVisualIndex, oldVisualIndex)
         self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount()-1, 1))
+        
     
     def getPointList(self, allPoints=False):
         return [point for point in self._data if point['checked'] == Qt.Checked or allPoints]

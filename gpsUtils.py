@@ -655,12 +655,12 @@ class GPSResection(with_metaclass(ErrorCatcher, QObject)):
             if self.leftPoint is not None and self.rightPoint is not None:
                 a = self.leftPoint
                 b = self.rightPoint
-                line = QgsGeometry.fromPolylineXY([a,b])
+                azimuth = a.azimuth(b)
                 dist = self.leftDistance
                 if dist == 0.0:
                     self.noCalcResection()
                 else:
-                    calcPoint = (line.interpolate(dist).asPoint())
+                    calcPoint = a.project(dist, azimuth)
                     Xcp = calcPoint.x()
                     Ycp = calcPoint.y()
                     self.parent.lblXP.setText(str(Xcp))

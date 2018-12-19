@@ -71,7 +71,9 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
                                 path.join(self.pluginPath, 'markers/krzyz w okregu.svg'),
                                 self)
         self.path = GPSPath(self.canvas, self)
-        self.dataWriter = GPSDataWriter(self, self.cmbLayers)
+        self.dataWriter = GPSDataWriter(self)
+        self.cmbLayers.setFilters( QgsMapLayerProxyModel.HasGeometry )
+        self.cmbLayers.currentIndexChanged[int].connect(self.dataWriter.changeLayer)
         self.getLeftPoint = GPSGetCanvasPoint(self.canvas, self.btnA)
         self.getLeftPoint.pointSide = 'left'
         self.getRightPoint = GPSGetCanvasPoint(self.canvas, self.btnB)
@@ -89,14 +91,17 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.lastPointElevation = None
         self.groupBox_3.setVisible(False)
         self.pointListLogger = GPSMeasureSave(self.logger, QSettings().value('gpsTracker/measureSaveInterval', 1, type=int), QSettings().value('gpsTracker/measureSave', True, type=bool))
-        self.tvPointList.model().insertRows(self.pointListLogger.loadMeasure())
+        points = self.pointListLogger.loadMeasure()
+        if points:
+            groups = list(set([ p['group_id'] for p in points ]))
+            self.addEnclaves(len(groups)-1)
+        self.tvPointList.model().insertRows(points)
         
     def clean(self):
         #if self.connection.getStatus() != self.connection.DISCONNECTED:
         #    self.connection.disconnectGPS()
         if self.pointListLogger.timer.isActive():
             self.pointListLogger.timer.stop()
-        self.dataWriter.clean()
         self.path.clean()
         self.marker.clean()
         self.selectedMarker.clean()
@@ -110,6 +115,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         #self.tvPointList = GPSPointListView(self.pointList)
         self.tvPointList = GPSPointListView()
         self.vlPointList.addWidget(self.tvPointList)
+        self.splitter.splitterMoved.connect( lambda pos, index: self.saveSettings( 'splitterPos',self.splitter.saveState()) )
         self.tvInfoList = GPSInfoListView(self.infoList)
         self.vlInfoList.addWidget(self.tvInfoList)
         self.iface.addDockWidget(Qt.RightDockWidgetArea,self)
@@ -182,13 +188,15 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             self.btnSelection.setDefaultAction(self.selectAllAction)
         value = s.value('gpsTracker/deleteItemType', 2, type=int)
         if value == 0:
-            self.btnDeletePoint.setDefaultAction(self.deleteCheckedItems)
-        elif value == 1:
-            self.btnDeletePoint.setDefaultAction(self.deleteAll)
-        else:
             self.btnDeletePoint.setDefaultAction(self.deleteSelectedItem)
+        elif value == 1:
+            self.btnDeletePoint.setDefaultAction(self.deleteCheckedItems)
+        else:
+            self.btnDeletePoint.setDefaultAction(self.deleteAll)
         self.cmbMeasureMethod.setCurrentIndex(s.value('gpsTracker/measureMethod', 0, type=int))
         self.measureMethodChanged(self.cmbMeasureMethod.currentIndex())
+        #self.splitter.moveSplitter( s.value('gpsTracker/splitterPos', 100, type=int), 1)
+        self.splitter.restoreState(s.value('gpsTracker/splitterPos', QByteArray(), type=QByteArray))
         #Zakładka Opcje
         self.cmbCRS.setCurrentIndex(s.value('gpsTracker/crs', 4, type=int))
         self.pluginCrsChanged(self.cmbCRS.currentIndex())
@@ -207,8 +215,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             self.cmbMarker.setCurrentIndex(0)
         self.sMarkerSize.setValue(s.value('gpsTracker/markerSize', 24, type=int))
         self.setMarkerIcon(str(self.cmbMarker.currentText()))
-        self.cmbCenter.setCurrentIndex(s.value('gpsTracker/centerType', 1, type=int))
-        self.sbExt.setValue(s.value('gpsTracker/centerExtent', 50, type=int))
+        self.cmbCenter.setCurrentIndex(s.value('gpsTracker/centerType', 2, type=int))
+        self.sbExt.setValue(s.value('gpsTracker/centerExtent', 80, type=int))
         self.sbExt.setEnabled(self.cmbCenter.currentIndex()==2)
         logDir = self.logger.verifyDirectory(s.value('gpsTracker/logDir', self.pluginPath+'/log'))
         self.eLogDir.setText(logDir)
@@ -409,11 +417,14 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             self.btnConnect.setText(u'Łączenie...')
         self.marker.setMarkerVisible(status == self.connection.CONNECTED and self.gbMarker.isChecked())
     
-    def fixTypeChanged(self, fixType):
+    def fixTypeChanged(self, fixType, quality):
         if fixType == 2:
             self.btnConnect.setStyleSheet('background-color: rgb(255, 255, 0);')
         elif fixType == 3:
-            self.btnConnect.setStyleSheet('background-color: rgb(0, 255, 0);')
+            if quality in (2, 4, 5):
+                self.btnConnect.setStyleSheet('background-color: rgb(100, 200, 255);')
+            else:
+                self.btnConnect.setStyleSheet('background-color: rgb(0, 255, 0);')
     
     def measureStopped(self, data, updatePoint):
         data.update({"group_id": self.cmbEnclaves.currentIndex()})
@@ -513,7 +524,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             action.hovered.connect(self.showCalcPoint)
             menu.addAction(action)
      
-    def addEnclave(self, index):
+    def addEnclave(self):
        index = self.cmbEnclaves.count()
        if self.cmbEnclaves.count() == 1:
            self.cmbEnclaves.addItem('Enklawa 1')
@@ -521,6 +532,11 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
        else:
            self.cmbEnclaves.addItem('Enklawa ' + str(index))
            self.cmbEnclaves.setCurrentIndex(index)
+    
+    def addEnclaves(self, count, currentIndex=0):
+        for i in range(count):
+            self.addEnclave()
+        self.cmbEnclaves.setCurrentIndex( currentIndex )
            
     def deleteEnclave(self, index):
         index = self.cmbEnclaves.currentIndex()
@@ -591,9 +607,9 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         
     def offsetDirectionChanged(self, index):
         if index == 0:
-            self.saveSettings('gpsTracker/offsetDirection', self.cmbOffsetDirection.currentIndex())
+            self.saveSettings('offsetDirection', self.cmbOffsetDirection.currentIndex())
         else:
-            self.saveSettings('gpsTracker/offsetDirection', self.cmbOffsetDirection.currentIndex())
+            self.saveSettings('offsetDirection', self.cmbOffsetDirection.currentIndex())
      
     def measureMethodChanged(self, index):
         self.resection.calcResection()

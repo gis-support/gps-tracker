@@ -27,7 +27,8 @@ from qgis.gui import *
 from PyQt5.QtWidgets import QPushButton, QMessageBox
 from math import sqrt
 from time import strftime
-from os import remove, stat, path
+from os import remove, stat, path, startfile
+from os.path import dirname
 from sys import platform
 from subprocess import Popen
 import csv
@@ -222,24 +223,12 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
     rzFieldIndex = -1
     calcPointsIndexes = []
     
-    def __init__(self, parent, cmbLayers):
+    def __init__(self, parent):
         QObject.__init__(self, parent)
         self.parent = parent
-        self.cmbLayers = cmbLayers
         self.parent.connection.gpsMeasureStopped[dict, bool].connect(self.pointReceived)
-        QgsProject.instance().layersAdded.connect(self.addLayers)
-        QgsProject.instance().layersWillBeRemoved.connect(self.removeLayers)
-        cmbLayers.currentIndexChanged[int].connect(self.changeLayer)
         #jeszcze zmiana nazwy warstwy
         self.setLayer(None)
-        self.getAllLayers()
-    
-    def clean(self):
-        QgsProject.instance().layersAdded.disconnect(self.addLayers)
-        QgsProject.instance().layersWillBeRemoved.disconnect(self.removeLayers)
-    
-    def getAllLayers(self):
-        self.addLayers(iter(list(QgsProject.instance().mapLayers().values())))
     
     def setLayer(self, layer):
         self.activeLayer = layer
@@ -257,25 +246,8 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
             self.rzFieldIndex = layer.fields().indexFromName('Rzedna')
         else:
             self.nrFieldIndex = -1
+            self.rzFieldIndex = -1
         self.setLayer(layer)
-    
-    def addLayers(self, layers):
-        for layer in layers:
-            if layer.type() == QgsMapLayer.VectorLayer:
-                icon = QIcon(self.iconsPath + self.geomIcon[layer.geometryType()])
-                self.cmbLayers.addItem(icon, layer.name(), layer.id())
-        self.cmbLayers.model().sort(0)
-    
-    def removeLayers(self, layerIds):
-        #ta funkcja jest wywoływana podwójnie
-        model = self.cmbLayers.model()
-        start = model.index(0, 0)
-        for layerId in layerIds:
-            try:
-                row = model.match(start, Qt.UserRole, layerId)[0].row()
-                model.removeRow(row)
-            except:
-                continue
                 
     def pointReceived(self, coords, updatePoint=False):
         if updatePoint or not self.activeLayer:
@@ -446,10 +418,10 @@ class GPSLogger(with_metaclass(ErrorCatcher, QObject)):
     
     def writePointList(self):
         pointList = self.parent.tvPointList.model().getPointList(True)
-        with open(path.join(self.getLogDirectory(), 'pointList.csv'), 'w') as csvfile:
+        with open(path.join(self.getLogDirectory(), 'pointList.csv'), 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             for row in pointList:
-                writer.writerow([row['id'], row['x'], row['y'], row['text'], row['lp'], row['checked']])
+                writer.writerow([row['id'], row['x'], row['y'], row['text'], row['lp'], row['checked'], row['group_id']])
                 
     @classmethod
     def changeDirectory(cls, directory):
@@ -481,7 +453,8 @@ Dane zostały zapisane w pliku '%s' w katalogu logowania." % cls.filePath)
     @classmethod
     def openErrorFile(cls):
         if platform == 'win32':
-            Popen('explorer /select,"%s"' % cls.filePath)
+            #Popen('explorer /select,"%s"' % cls.filePath)
+            startfile(dirname(cls.filePath))
         else:
             opener ="open" if platform == "darwin" else "xdg-open"
             Popen([opener, QFileInfo(cls.filePath).absolutePath()])
@@ -525,11 +498,11 @@ class GPSMeasureSave(with_metaclass(ErrorCatcher, QObject)):
             return []
         corruptedData = False
         data = []
-        with open(fileName, 'rb') as csvfile:
+        with open(fileName) as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 try:
-                    data.append({'id':int(row[0]), 'x':float(row[1]), 'y':float(row[2]), 'text':row[3], 'lp':int(row[4]), 'checked':int(row[5])})
+                    data.append({'id':int(row[0]), 'x':float(row[1]), 'y':float(row[2]), 'text':row[3], 'lp':int(row[4]), 'checked':int(row[5]), 'group_id':int(row[6])})
                 except:
                     corruptedData = True
                     continue

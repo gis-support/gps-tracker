@@ -51,7 +51,7 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     gpsConnectionStart = pyqtSignal()
     gpsConnectionStop = pyqtSignal()
     gpsConnectionStatusChanged = pyqtSignal(int)
-    gpsFixTypeChanged = pyqtSignal(int)
+    gpsFixTypeChanged = pyqtSignal(int, int)
     gpsMeasureStopped = pyqtSignal(dict, bool)
     gpsPositionChanged = pyqtSignal(float, float, float, float)
     gpsMeasureMethodChanged = pyqtSignal(int)
@@ -140,8 +140,8 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
             self.infoList[7] = 'N/A'
 
         try:
-            if self.infoList[8] != self.fixType[gpsData.fixType]:
-                self.gpsFixTypeChanged.emit(gpsData.fixType)
+            if (self.infoList[8] != self.fixType[gpsData.fixType]) or (self.infoList[9] != self.quality[gpsData.quality]):
+                self.gpsFixTypeChanged.emit(gpsData.fixType, gpsData.quality)
             self.infoList[8] = self.fixType[gpsData.fixType]
         except KeyError:
             self.infoList[8] = str(gpsData.fixType)

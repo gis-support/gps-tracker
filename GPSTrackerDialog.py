@@ -25,6 +25,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QDockWidget, QMenu, QAction, QColorDialog, QFileDialog
 from qgis.core import *
 from qgis.gui import *
+from .Ui_GPSTracker import Ui_GPSTracker
 
 from .gpsConnection import GPSConnection
 
@@ -34,10 +35,6 @@ from math import sqrt
 import json
 from .gpsUtils import *
 from future.utils import with_metaclass
-from qgis.PyQt import uic
-import os.path as op
-
-Ui_GPSTracker, _ = uic.loadUiType(op.join(op.dirname(__file__), 'Ui_GPSTracker.ui'))
 
 try:
     from os import startfile

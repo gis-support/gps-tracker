@@ -25,6 +25,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QDockWidget, QMenu, QAction, QColorDialog, QFileDialog
 from qgis.core import *
 from qgis.gui import *
+from .Ui_GPSTracker import Ui_GPSTracker
 
 from .gpsConnection import GPSConnection
 
@@ -34,10 +35,6 @@ from math import sqrt
 import json
 from .gpsUtils import *
 from future.utils import with_metaclass
-from qgis.PyQt import uic
-import os.path as op
-
-Ui_GPSTracker, _ = uic.loadUiType(op.join(op.dirname(__file__), 'Ui_GPSTracker.ui'))
 
 try:
     from os import startfile
@@ -89,6 +86,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.loadSettings()
         self.setupSignals()
         self.lastPointElevation = None
+        self.groups_points = None
         self.groupBox_3.setVisible(False)
         self.pointListLogger = GPSMeasureSave(self.logger, QSettings().value('gpsTracker/measureSaveInterval', 1, type=int), QSettings().value('gpsTracker/measureSave', True, type=bool))
         points = self.pointListLogger.loadMeasure()

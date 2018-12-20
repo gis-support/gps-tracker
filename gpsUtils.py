@@ -165,15 +165,46 @@ class GPSPath(with_metaclass(ErrorCatcher, QObject)):
         self.resetPoints()
         del self.path
         del self.vertexes
-    
+        
+    def getGroups(self, points):
+        tab = []
+        for point in points:
+            try:
+                group = point['group_id']
+            except:
+                pass
+            tab.append(group)
+        return list(set(tab))
+        
+    def addPoints(self, groups, points):
+       d = {}
+       for group in groups:
+           for point in points:
+               if point['group_id'] == group:
+                   if group in d:
+                       d[group].append(self.transform.transform(point['x'], point['y']))
+                   else:
+                       p = []
+                       p.append(self.transform.transform(point['x'], point['y']))
+                       d.update({group: p})
+               self.vertexes.addPoint(self.transform.transform(point['x'], point['y']))
+       return d
+        
     def dataChanged(self, *args):
-        self.resetPoints()
-        points = self.parent.tvPointList.model().getPointList()
-        for coords in points:
-            point = self.transform.transform(coords['x'], coords['y'])
-            self.path.addPoint(point)
-            self.vertexes.addPoint(point)
-    
+        try:
+            self.resetPoints()
+            points = self.parent.tvPointList.model().getPointList()
+            groups_points = {}
+            groups = self.getGroups(points)
+            groups_points = self.addPoints(groups, points)
+            self.parent.groupsPoints = groups_points
+            if groups_points:
+                values = list(groups_points.values())
+            self.path.addGeometry(QgsGeometry.fromMultiPolylineXY(values))
+            
+        except:
+            pass
+            
     def resetPoints(self):
         try:
             self.path.reset()
@@ -329,7 +360,8 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         if geomType == QgsWkbTypes.LineGeometry:
             feat.setGeometry(QgsGeometry.fromPolylineXY([self.transform.transform(point['x'], point['y']) for point in points]))
         else:
-            feat.setGeometry(QgsGeometry.fromPolygonXY([[self.transform.transform(point['x'], point['y']) for point in points]]))
+            feat.setGeometry(QgsGeometry.fromPolygonXY([[self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] == 0],\
+                [self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] != 0]]))
         feat.setFields(self.activeLayer.fields(), True)
         self.activeLayer.addFeature(feat)
         if showFeatureForm:
@@ -629,6 +661,10 @@ class GPSResection(with_metaclass(ErrorCatcher, QObject)):
                 a = self.leftPoint
                 b = self.rightPoint
                 azimuth = a.azimuth(b)
+                if azimuth > 180:
+                    azimuth = azimuth - 180
+                else:
+                    azimuth = azimuth + 180
                 dist = self.leftDistance
                 if dist == 0.0:
                     self.noCalcResection()

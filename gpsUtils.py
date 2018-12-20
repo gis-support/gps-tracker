@@ -388,7 +388,8 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         if geomType == QgsWkbTypes.LineGeometry:
             feat.setGeometry(QgsGeometry.fromPolylineXY([self.transform.transform(point['x'], point['y']) for point in points]))
         else:
-            feat.setGeometry(QgsGeometry.fromPolygonXY([[self.transform.transform(point['x'], point['y']) for point in points]])) 
+            feat.setGeometry(QgsGeometry.fromPolygonXY([[self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] == 0],\
+                [self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] != 0]]))
         feat.setFields(self.activeLayer.fields(), True)
         self.activeLayer.addFeature(feat)
         if showFeatureForm:

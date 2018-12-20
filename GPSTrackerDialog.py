@@ -84,6 +84,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.loadSettings()
         self.setupSignals()
         self.lastPointElevation = None
+        self.groups_points = None
         self.groupBox_3.setVisible(False)
         self.pointListLogger = GPSMeasureSave(self.logger, QSettings().value('gpsTracker/measureSaveInterval', 1, type=int), QSettings().value('gpsTracker/measureSave', True, type=bool))
         self.tvPointList.model().insertRows(self.pointListLogger.loadMeasure())

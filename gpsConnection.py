@@ -227,7 +227,8 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
         if count:
             x = sum([item[0] for item in self.measuredPoints])/count
             y = sum([item[1] for item in self.measuredPoints])/count
-            self.gpsMeasureStopped.emit({'x':x, 'y':y, 'lp':count}, self.updatePoint)
+            elev = sum([item[3] for item in self.measuredPoints])/count
+            self.gpsMeasureStopped.emit({'x':x, 'y':y, 'rzedna':elev ,'lp':count}, self.updatePoint)
         self.gpsMessage.emit(u'Zakończono pomiar')
         self.resetMeasuring()
     

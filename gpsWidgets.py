@@ -26,6 +26,7 @@ from PyQt5.QtWidgets import QStyledItemDelegate, QTableView, QAbstractItemView, 
 from qgis.core import *
 from .gpsUtils import ErrorCatcher
 from future.utils import with_metaclass
+from operator import itemgetter
 from . import GPSTrackerDialog as trackerDialog
 
 class GPSEditDelegate(with_metaclass(ErrorCatcher, QStyledItemDelegate)):
@@ -127,7 +128,12 @@ class GPSPointListModel(GPSModel):
     
     def headerData(self, section, orientation, role=Qt.DisplayRole):
         if role == Qt.DisplayRole and orientation == Qt.Vertical:
-            return 'Punkt %d' % self._data[section]['id']
+            item = self._data[section]
+            if item['group_id']==0:
+                name = 'Punkt'
+            else:
+                name = 'E{} Pkt'.format( item['group_id'] )
+            return '{} {}'.format(name, item['id'])
         if role == Qt.DisplayRole and orientation == Qt.Horizontal:
             return self._hHeader[section]
     
@@ -243,12 +249,16 @@ class GPSPointListModel(GPSModel):
     def moveRow(self, logicalIndex, oldVisualIndex, newVisualIndex):
         if self.movingRow:
             self.movingRow = False
-            return
+            return False
+        
         self.movingRow = True
         self._data.insert(newVisualIndex, self._data.pop(oldVisualIndex))
         self.tableView.verticalHeader().moveSection(newVisualIndex, oldVisualIndex)
+        #Sortujemy dane wg grupy
+        self._data = sorted(self._data, key=itemgetter('group_id'))
         self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount()-1, 1))
-        
+        self.headerDataChanged.emit(Qt.Vertical, 0, self.rowCount()-1)
+        return True
     
     def getPointList(self, allPoints=False):
         return [point for point in self._data if point['checked'] == Qt.Checked or allPoints]
@@ -302,7 +312,7 @@ class GPSPointListView(GPSListView):
         #self.setContextMenuPolicy(Qt.CustomContextMenu)
         #self.customContextMenuRequested[QPoint].connect(self.displayMenu)
         self.horizontalHeader().setStretchLastSection(True)
-        self.verticalHeader().sectionMoved[int, int, int].connect(self.model().moveRow)
+        self.verticalHeader().sectionMoved[int, int, int].connect(self.moveRow)
     
     def displayMenu(self, pos):
         item = self.indexAt(pos)
@@ -353,6 +363,22 @@ class GPSPointListView(GPSListView):
                     return
         self.model().removeRow(item.row())
     
+    def deleteSelectedItems( self, checked ):
+        if self.model().rowCount() == 0:
+            return
+        items = self.selectedIndexes()
+        if len(items)==0:
+            QMessageBox.critical(None, 'GPS Tracker Plugin', u'Wybierz punkty do usunięcia')
+            return
+        msg = QMessageBox.question(None, 'GPS Tracker Plugin',
+                u'Czy usunąć wybrane punkty ({:.0f})?'.format( len(items)/2 ),
+                QMessageBox.Yes | QMessageBox.No)
+        if msg == QMessageBox.No:
+            return
+        rows = reversed(sorted(set(index.row() for index in items)))
+        for row in rows:
+            self.model().removeRow( row )
+    
     def deleteItems(self, checked):
         sender = self.sender()
         parent = sender.parent()
@@ -369,7 +395,7 @@ class GPSPointListView(GPSListView):
             item = self.model().index(i, 0)
             if not sender.all and item.data(Qt.CheckStateRole) == Qt.Unchecked:
                 continue
-            self.deleteItem(True, item)
+            self.model().removeRow( i )
     
     def setItemCheck(self, checked):
         item = self.selectedIndexes()[0]
@@ -399,3 +425,11 @@ class GPSPointListView(GPSListView):
             point = QgsPoint(x, y)
         self.gpsSelectionChanged.emit(row, point)
         GPSListView.selectionChanged(self, selected, deselected)
+    
+    def moveRow( self, logicalIndex, oldVisualIndex, newVisualIndex):
+        #Przesuwany element
+        item = self.model()._data[oldVisualIndex]
+        #Zmiany w danych
+        self.model().moveRow( logicalIndex, oldVisualIndex, newVisualIndex )
+        #Zaznaczenie przesuniętego obiektu
+        self.selectRow( self.model()._data.index( item ) )

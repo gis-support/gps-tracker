@@ -266,9 +266,7 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         if layer:
             self.transform = QgsCoordinateTransform(self.wgs84, layer.crs(), QgsProject.instance())
     
-    def changeLayer(self, index):
-        layerId = self.sender().itemData(index)
-        layer = QgsProject.instance().mapLayer(layerId)
+    def changeLayer(self, layer):
         if not layer:
             self.setLayer(None)
             return

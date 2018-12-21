@@ -22,7 +22,7 @@ from __future__ import absolute_import
 from builtins import str
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QDockWidget, QMenu, QAction, QColorDialog, QFileDialog
+from PyQt5.QtWidgets import QDockWidget, QMenu, QAction, QColorDialog, QFileDialog, QTableView
 from qgis.core import *
 from qgis.gui import *
 
@@ -73,7 +73,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.path = GPSPath(self.canvas, self)
         self.dataWriter = GPSDataWriter(self)
         self.cmbLayers.setFilters( QgsMapLayerProxyModel.HasGeometry )
-        self.cmbLayers.currentIndexChanged[int].connect(self.dataWriter.changeLayer)
+        self.cmbLayers.layerChanged.connect(self.dataWriter.changeLayer)
         self.getLeftPoint = GPSGetCanvasPoint(self.canvas, self.btnA)
         self.getLeftPoint.pointSide = 'left'
         self.getRightPoint = GPSGetCanvasPoint(self.canvas, self.btnB)
@@ -115,6 +115,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
     def setupCustomUi(self):
         #self.tvPointList = GPSPointListView(self.pointList)
         self.tvPointList = GPSPointListView()
+        self.tvPointList.setSelectionMode( QTableView.ContiguousSelection )
         self.vlPointList.addWidget(self.tvPointList)
         self.splitter.splitterMoved.connect( lambda pos, index: self.saveSettings( 'splitterPos',self.splitter.saveState()) )
         self.tvInfoList = GPSInfoListView(self.infoList)
@@ -256,8 +257,8 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.btnMeasurePoint.setMenu(self.measureMenu)
         #Przycisk Usuń
         self.deleteMenu = QMenu()
-        self.deleteSelectedItem = QAction(u'Usuń wybrany', self)
-        self.deleteSelectedItem.triggered.connect(self.tvPointList.deleteItem)
+        self.deleteSelectedItem = QAction(u'Usuń wybrane', self)
+        self.deleteSelectedItem.triggered.connect(self.tvPointList.deleteSelectedItems)
         self.deleteCheckedItems = QAction(u'Usuń zaznaczone', self)
         self.deleteCheckedItems.all = False
         self.deleteCheckedItems.triggered.connect(self.tvPointList.deleteItems)
@@ -525,7 +526,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             action.hovered.connect(self.showCalcPoint)
             menu.addAction(action)
      
-    def addEnclave(self):
+    def addEnclave(self, checked=True):
        index = self.cmbEnclaves.count()
        if self.cmbEnclaves.count() == 1:
            self.cmbEnclaves.addItem('Enklawa 1')

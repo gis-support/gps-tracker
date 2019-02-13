@@ -349,6 +349,15 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
     
     def saveObject(self, checkedOnly, geomType):
         points = self.parent.tvPointList.model().getPointList(checkedOnly)
+        groups_points = {}
+        for point in points:
+            if point['group_id'] != 0:
+                groups_points.update({point['group_id']: []})    
+        for key in groups_points.keys():
+            for point in points:
+                if point['group_id'] != 0 and point['group_id'] == key:
+                    groups_points[key].append(self.transform.transform(point['x'], point['y']))
+        polygon = [self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] == 0]   
         if (geomType == QgsWkbTypes.LineGeometry and len(points) < 2) or (geomType == QgsWkbTypes.PolygonGeometry and len(points) < 3):
             QMessageBox.critical(None, 'GPS Tracker Plugin', u'Liczba zarejestrowanych lub wybranych punktów jest zbyt mała!')
             return
@@ -358,8 +367,12 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         if geomType == QgsWkbTypes.LineGeometry:
             feat.setGeometry(QgsGeometry.fromPolylineXY([self.transform.transform(point['x'], point['y']) for point in points]))
         else:
-            feat.setGeometry(QgsGeometry.fromPolygonXY([[self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] == 0],\
-                [self.transform.transform(point['x'], point['y']) for point in points if point['group_id'] != 0]]))
+            if len(list(groups_points.keys())) > 0:
+                geoms = []
+                for val in groups_points.values():
+                    geoms.append(val)
+            geoms.append(polygon)
+            feat.setGeometry(QgsGeometry.fromPolygonXY(geoms))
         feat.setFields(self.activeLayer.fields(), True)
         self.activeLayer.addFeature(feat)
         if showFeatureForm:

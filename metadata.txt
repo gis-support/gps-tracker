@@ -12,7 +12,7 @@
 name=GPS Tracker Plugin
 qgisMinimumVersion=3.4
 description=Rejestrowanie danych z odbiornika GPS
-version=3.0
+version=3.0.1
 
 # end of mandatory metadata
 

@@ -436,11 +436,12 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
     
     def positionChanged(self, x, y, direction, elevation):
         self.lastPointElevation = elevation
+        current_coords = self.transform.transform(x, y)
         self.marker.setMarkerPos(x, y)
-        if(self.cbOffsetMeasure.isChecked()):
+        if self.cbOffsetMeasure.isChecked():
             p = QgsCoordinateTransform(self.wgs84, self.u1992, QgsProject.instance()).transform(x, y)
             distance = self.sbOffsetDist.value()
-            if(self.cmbOffsetDirection.currentIndex() == 0):
+            if self.cmbOffsetDirection.currentIndex() == 0:
                 angle = direction - 90
                 if angle<0:
                     angle = 360 - abs(angle)   
@@ -461,12 +462,12 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
                     return
             self.lastGpsPoint = gpsCoords
             if self.cmbCenter.currentIndex() == 0:
-                self.moveCanvas(gpsCoords)
+                self.moveCanvas(current_coords)
             elif self.cmbCenter.currentIndex() == 2:
                 extentlimt = QgsRectangle(self.canvas.extent())
                 extentlimt.scale(self.sbExt.value()/100.)
-                if not extentlimt.contains(gpsCoords):
-                    self.moveCanvas(gpsCoords)
+                if not extentlimt.contains(current_coords):
+                    self.moveCanvas(current_coords)
     
     def moveCanvas(self, newCenter):
         newExtent = QgsRectangle(newCenter, newCenter)

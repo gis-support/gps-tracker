@@ -235,5 +235,8 @@ class GPSConnection(with_metaclass(ErrorCatcher, QObject)):
     def resetMeasuring(self):
         self.measuredPoints = []
         self.measuring = False
-        del self.measureTime
-        del self.measureValue
+        try:
+            del self.measureTime
+            del self.measureValue
+        except AttributeError:
+            pass

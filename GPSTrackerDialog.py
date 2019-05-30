@@ -97,6 +97,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
             groups = list(set([ p['group_id'] for p in points ]))
             self.addEnclaves(len(groups)-1)
         self.tvPointList.model().insertRows(points)
+        self.tvPointList.scrollToBottom()
         
     def clean(self):
         #if self.connection.getStatus() != self.connection.DISCONNECTED:
@@ -117,6 +118,9 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         self.tvPointList = GPSPointListView()
         self.tvPointList.setSelectionMode( QTableView.ContiguousSelection )
         self.vlPointList.addWidget(self.tvPointList)
+        self.tvPointList.verticalScrollBar().setStyleSheet(
+        """QScrollBar:vertical {width: 17.5}"""
+        )
         self.splitter.splitterMoved.connect( lambda pos, index: self.saveSettings( 'splitterPos',self.splitter.saveState()) )
         self.tvInfoList = GPSInfoListView(self.infoList)
         self.vlInfoList.addWidget(self.tvInfoList)
@@ -431,6 +435,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
     def measureStopped(self, data, updatePoint):
         data.update({"group_id": self.cmbEnclaves.currentIndex()})
         self.tvPointList.model().insertRow(data, updatePoint)
+        self.tvPointList.scrollToBottom()
         if updatePoint:
             self.selectedMarker.setMarker(0, QgsPoint(data['x'], data['y']))
     
@@ -560,11 +565,13 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
                             item['group_id'] = item['group_id']-1
                     except:
                         pass
-                self.tvPointList.model().removeRows(min(indexes),len(indexes))
+                try:
+                    self.tvPointList.model().removeRows(min(indexes),len(indexes))
+                except ValueError:
+                    pass
                 self.cmbEnclaves.removeItem(index)
                 self.cmbEnclaves.setCurrentIndex(index-1)
                 count = self.cmbEnclaves.count()
-                
                 if index < count:
                     for i in range(count):
                         if i < index:
@@ -575,8 +582,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
                             self.cmbEnclaves.setItemText(i, encl+" "+num)                  
             else:
                 return 0
-                
-                            
+                                      
     def encIndexChanged(self, index):
         self.tvPointList.model().currentGroup = self.cmbEnclaves.currentIndex()
         index = self.tvPointList.model().rowCount()-1
@@ -777,6 +783,7 @@ class GPSTrackerDialog(with_metaclass(ErrorCatcher, type('NewBase', (QDockWidget
         if distance > measureDistance**2:
             calcPoint = self.transform.transform(self.getPointAtDistance(lastPoint, thisPoint, measureDistance), QgsCoordinateTransform.ReverseTransform)
             self.tvPointList.model().insertRow({'x':calcPoint.x(), 'y':calcPoint.y(), 'lp':1, 'group_id': self.cmbEnclaves.currentIndex()}, False)
+            self.tvPointList.scrollToBottom()
     
     @staticmethod
     def getPointAtDistance(p1, p2, distance):

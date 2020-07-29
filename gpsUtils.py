@@ -367,8 +367,8 @@ class GPSDataWriter(with_metaclass(ErrorCatcher, QObject)):
         if geomType == QgsWkbTypes.LineGeometry:
             feat.setGeometry(QgsGeometry.fromPolylineXY([self.transform.transform(point['x'], point['y']) for point in points]))
         else:
+            geoms = []
             if len(list(groups_points.keys())) > 0:
-                geoms = []
                 for val in groups_points.values():
                     geoms.append(val)
             geoms.append(polygon)
